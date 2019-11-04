@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-import Hello from './Hello'
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<Hello/>, document.getElementById('root'));
+import LLWord from './pages/Word';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+ReactDOM.render(<LLWord/>, document.getElementById('page-content'));
+
 serviceWorker.unregister();
