@@ -1,17 +1,18 @@
 import * as React from 'react';
 
-export interface LLProps {
-  title?: string;
-  icon?: string;
+/**
+ * Border Card
+ */
+export interface LLBorderCardProps {
+  title: string;
+  icon: string;
   color?: string;
 }
- 
-export interface LLState {}
- 
-class LLCard extends React.Component<LLProps, LLState> {}
-
-class LLBorderCard extends LLCard {
-  
+export interface LLBorderCardState {}
+class LLBorderCard extends React.Component<LLBorderCardProps, LLBorderCardState> {
+  public static defaultProps = {
+    color: "primary"
+  };
   render() {
     // Update background icon
     let iconClassName = "fa-2x text-gray-300 ";
@@ -21,19 +22,13 @@ class LLBorderCard extends LLCard {
       iconTag = <li className={iconClassName}></li>
     }
 
-    // Color classes
-    let borderColor = "primary";
-    if(this.props.color) {
-      borderColor = this.props.color;
-    }
-
     return (
       <div className="col-xl-3 col-md-6 mb-4">
-        <div className={"card border-left-" + borderColor + " shadow h-100 py-2"}>
+        <div className={"card border-left-" + this.props.color + " shadow h-100 py-2"}>
           <div className="card-body">
             <div className="row no-gutters align-items-center">
               <div className="col mr-2">
-                <div className={"text-xs font-weight-bold text-" + borderColor + " text-uppercase mb-1"}>{this.props.title}</div>
+                <div className={"text-xs font-weight-bold text-" + this.props.color + " text-uppercase mb-1"}>{this.props.title}</div>
                 <div className="h5 mb-0 font-weight-bold text-gray-800">{this.props.children}</div>
               </div>
               <div className="col-auto">
@@ -47,4 +42,32 @@ class LLBorderCard extends LLCard {
   }
 }
 
-export default LLBorderCard;
+/**
+ * Basic Card
+ */
+export interface LLBasicCardProps {
+  title: string;
+  color?: string;
+}
+export interface LLBasicCardState {}
+class LLBasicCard extends React.Component<LLBasicCardProps, LLBasicCardState> {
+  public static defaultProps = {
+    color: "primary"
+  };
+
+  render() {
+    return (
+      <div className="card shadow mb-4">
+        <div className="card-header py-3">
+          <h6 className={"m-0 font-weight-bold text-" + this.props.color}>{this.props.title}</h6>
+        </div>
+        <div className="card-body">{this.props.children}</div>
+      </div>
+    );
+  }
+}
+
+export {
+  LLBorderCard,
+  LLBasicCard
+};

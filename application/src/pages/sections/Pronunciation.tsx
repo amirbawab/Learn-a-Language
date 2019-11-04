@@ -1,5 +1,5 @@
 import * as React from 'react';
-import LLBorderCard from '../../components/Card';
+import {LLBorderCard} from '../../components/Card';
 import LLPronunciationData from '../../models/PronunciationData';
 
 export interface LLPronunciationProps {
@@ -8,7 +8,6 @@ export interface LLPronunciationProps {
 export interface LLPronunciationState {}
 class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciationState> {
   render() {
-    console.log(this.props.data);
     return (
       <div className="row">
         {this.props.data.map((val, id) => {

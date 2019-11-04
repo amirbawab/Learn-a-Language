@@ -6,6 +6,7 @@ import LLWordTitle from '../components/Title';
 
 // Sections
 import LLPronunciation from './sections/Pronunciation';
+import LLExample from './sections/Example';
 
 // Models
 import LLWordData from '../models/WordData';
@@ -22,6 +23,7 @@ class LLWord extends LLPage {
         <div className="m-2">
           <LLWordTitle title={data.get_word()}/>
           <LLPronunciation data={data.get_pronunciations()}/>
+          <LLExample/>
         </div>
       );
     }
