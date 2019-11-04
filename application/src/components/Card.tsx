@@ -23,7 +23,7 @@ class LLBorderCard extends React.Component<LLBorderCardProps, LLBorderCardState>
     }
 
     return (
-      <div className="col-xl-3 col-md-6 mb-4">
+      <div className="col-xl-4 col-md-6 mb-4">
         <div className={"card border-left-" + this.props.color + " shadow h-100 py-2"}>
           <div className="card-body">
             <div className="row no-gutters align-items-center">

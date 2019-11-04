@@ -1,5 +1,19 @@
+import LLSoundData from './SoundData';
+
 class LLPronunciationData {
-  constructor(public language: string, public sound: string, public icon: string = "fas fa-language") {}
+  private sound: LLSoundData;
+  constructor(language: string, sound: string, private icon: string = "fas fa-language") {
+    this.sound = new LLSoundData(language, sound);
+  }
+  public get_language() {
+    return this.sound.get_language();
+  }
+  public get_icon() {
+    return this.icon;
+  }
+  public get_sound() {
+    return this.sound.get_sound();
+  }
 }
 
 export default LLPronunciationData;

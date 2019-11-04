@@ -11,7 +11,8 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
     return (
       <div className="row">
         {this.props.data.map((val, id) => {
-          return <LLBorderCard key={id} title={val.language} icon={val.icon}>{val.sound}</LLBorderCard>
+          return <LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
+                                icon={val.get_icon()}>{val.get_sound()}</LLBorderCard>
         })}
       </div>
     );
