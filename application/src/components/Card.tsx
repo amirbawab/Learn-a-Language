@@ -46,7 +46,7 @@ class LLBorderCard extends React.Component<LLBorderCardProps, LLBorderCardState>
  * Basic Card
  */
 export interface LLBasicCardProps {
-  title: string;
+  title?: string;
   color?: string;
 }
 export interface LLBasicCardState {}
@@ -56,11 +56,19 @@ class LLBasicCard extends React.Component<LLBasicCardProps, LLBasicCardState> {
   };
 
   render() {
-    return (
-      <div className="card shadow mb-4">
+
+    let title_tag = undefined;
+    if(this.props.title) {
+      title_tag = (
         <div className="card-header py-3">
           <h6 className={"m-0 font-weight-bold text-" + this.props.color}>{this.props.title}</h6>
         </div>
+      );
+    }
+
+    return (
+      <div className="card shadow mb-4">
+        {title_tag}
         <div className="card-body">{this.props.children}</div>
       </div>
     );
