@@ -2,7 +2,7 @@ import LLSoundData from './SoundData';
 
 class LLPronunciationData {
   private sound: LLSoundData;
-  constructor(language: string, sound: string, private icon: string = "fas fa-language") {
+  constructor(language: string, sound: string, private icon: string = "fas fa-microphone-alt") {
     this.sound = new LLSoundData(language, sound);
   }
   public get_language() {

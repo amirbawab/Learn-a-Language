@@ -4,7 +4,7 @@ import LLExampleData from './ExampleData';
 class LLWordModel {
   private pronunciations: LLPronunciationData[] = [];
   private examples: LLExampleData[] = [];
-  private native_form: string = "";
+  private natives: string[] = [];
   constructor(private word: string) {}
   public add_pronunciation(pronunciation: LLPronunciationData) {
     this.pronunciations.push(pronunciation);
@@ -21,11 +21,11 @@ class LLWordModel {
   public get_word() {
     return this.word;
   }
-  public set_native(native_form: string) {
-    this.native_form = native_form;
+  public add_native(native_form: string) {
+    this.natives.push(native_form);
   }
-  public get_native() {
-    return this.native_form;
+  public get_natives() {
+    return this.natives;
   }
 }
 

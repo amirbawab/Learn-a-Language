@@ -7,6 +7,7 @@ import LLWordTitle from '../components/Title';
 // Sections
 import LLPronunciation from './sections/Pronunciation';
 import LLExample from './sections/Example';
+import LLNative from './sections/Native';
 
 // Models
 import LLWordData from '../models/WordData';
@@ -17,7 +18,7 @@ class LLWord extends LLPage {
     state = {}
     render() {
       let data = new LLWordData("Tea");
-      data.set_native("茶");
+      data.add_native("茶");
       data.add_pronunciation(new LLPronunciationData("English", "Chai"));
       data.add_pronunciation(new LLPronunciationData("Arabic", "تشاي"));
 
@@ -27,14 +28,10 @@ class LLWord extends LLPage {
       data.add_example(example);
       data.add_example(example);
 
-      let title = data.get_word();
-      if(data.get_native() !== "") {
-        title += " - " + data.get_native();
-      }
-
       return (
         <div className="m-2">
-          <LLWordTitle title={title}/>
+          <LLWordTitle title={data.get_word()}/>
+          <LLNative data={data.get_natives()}/>
           <LLPronunciation data={data.get_pronunciations()}/>
           <LLExample data={data.get_examples()}/>
         </div>

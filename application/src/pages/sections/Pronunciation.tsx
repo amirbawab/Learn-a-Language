@@ -14,6 +14,9 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
           return <LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
                                 icon={val.get_icon()}>{val.get_sound()}</LLBorderCard>
         })}
+        <LLBorderCard title="" icon="fas fa-plus-square">
+          <a href="#"> Add Pronunciation</a>
+        </LLBorderCard>
       </div>
     );
   }
