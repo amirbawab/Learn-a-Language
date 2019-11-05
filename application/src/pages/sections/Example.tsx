@@ -7,17 +7,30 @@ export interface LLExampleProps {
 }
 export interface LLExampleState {}
 class LLExample extends React.Component<LLExampleProps, LLExampleState> {
-  state = {
-    form_hidden: true,
+  constructor(props: LLExampleProps) {
+    super(props);
+    this.props.data.map((example, example_id) => {
+      this.state.pronunciation_form_hidden.push(true);
+    });
   }
-  set_form_hidden(e : any, is_hidden : boolean) {
+  state = {
+    sentence_form_hidden: true,
+    pronunciation_form_hidden: Array()
+  }
+  set_sentence_form_hidden(e : any, is_hidden : boolean) {
     e.preventDefault();
-    this.setState({'form_hidden': is_hidden});
+    this.setState({'sentence_form_hidden': is_hidden});
+  }
+  set_pronunciation_form_hidden(e : any, id: number, is_hidden : boolean) {
+    e.preventDefault();
+    let new_array = Array.from(this.state.pronunciation_form_hidden)
+    new_array[id] = is_hidden;
+    this.setState({'pronunciation_form_hidden': new_array});
   }
   render() {
-    let form = undefined;
-    if(!this.state.form_hidden) {
-      form = (
+    let sentence_form = undefined;
+    if(!this.state.sentence_form_hidden) {
+      sentence_form = (
         <div className="row">
           <div className="col-lg-12">
             <LLBasicCard>
@@ -26,12 +39,27 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                 <input type="text" className="form-control" id="native"/>
               </div>
               <button className="btn btn-primary mr-2">Save</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
+              <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
         </div>
       );
     }
+
+    let sound_form = (id : number) => (
+      <div className="small">
+        <div className="form-group">
+          <label>Language</label>
+          <input type="text" className="form-control form-control-sm" id="language"/>
+        </div>
+        <div className="form-group">
+          <label>Sound</label>
+          <input type="text" className="form-control form-control-sm" id="sound"/>
+        </div>
+        <button className="btn btn-primary mr-2 btn-sm">Save</button>
+        <button className="btn btn-secondary btn-sm" onClick={(e) => this.set_pronunciation_form_hidden(e, id, true)}>Close</button>
+      </div>
+    );
 
     return (
       <div>
@@ -50,12 +78,15 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                         </div>
                       );
                     })}</div>
-                    <a href="#"><i className="fas fa-plus-square"></i> Add Pronunciation</a>
+                    <a href="#" onClick={(e) => this.set_pronunciation_form_hidden(e, example_id, false)}>
+                      <i className="fas fa-plus-square"></i> Add Pronunciation
+                    </a>
+                    {this.state.pronunciation_form_hidden[example_id] ? undefined : sound_form(example_id)}
                     <div className="border-top my-3"></div>
                   </div>
                 );
               })}
-              <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
+              <a href="#" onClick={(e) => this.set_sentence_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
                 <span className="icon text-white-50">
                   <i className="fas fa-plus-square"></i>
                 </span>
@@ -64,7 +95,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
             </LLBasicCard>
           </div>
         </div>
-        {form}
+        {sentence_form}
       </div>
     );
   }

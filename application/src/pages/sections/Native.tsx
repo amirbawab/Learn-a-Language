@@ -9,7 +9,8 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
   state = {
     form_hidden: true,
   }
-  set_form_hidden(is_hidden : boolean) {
+  set_form_hidden(e: any, is_hidden : boolean) {
+    e.preventDefault();
     this.setState({'form_hidden': is_hidden});
   }
   render() {
@@ -24,7 +25,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
                 <input type="text" className="form-control" id="native"/>
               </div>
               <button className="btn btn-primary mr-2">Save</button>
-              <button className="btn btn-secondary" onClick={() => this.set_form_hidden(true)}>Close</button>
+              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
         </div>
@@ -39,7 +40,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
           })}
 
           <div className="col-xl-4 col-md-6 mt-4">
-            <a href="#" onClick={() => this.set_form_hidden(false)} className="btn btn-primary btn-icon-split">
+            <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
               <span className="icon text-white-50">
                 <i className="fas fa-plus-square"></i>
               </span>
