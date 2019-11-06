@@ -3,6 +3,7 @@ import {LLBorderCard, LLBasicCard} from '../../components/Card';
 
 export interface LLNativeProps {
   data: string[];
+  onAdd: (form : string) => void;
 }
 export interface LLNativeState {}
 class LLNative extends React.Component<LLNativeProps, LLNativeState> {
@@ -13,6 +14,10 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
     e.preventDefault();
     this.setState({'form_hidden': is_hidden});
   }
+  add_native() {
+    let input = this.refs.native_form as HTMLInputElement;
+    this.props.onAdd(input.value);
+  }
   render() {
     let form = undefined;
     if(!this.state.form_hidden) {
@@ -22,9 +27,9 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
             <LLBasicCard>
               <div className="form-group">
                 <label>Native Form</label>
-                <input type="text" className="form-control" id="native"/>
+                <input type="text" className="form-control" ref="native_form"/>
               </div>
-              <button className="btn btn-primary mr-2">Add</button>
+              <button className="btn btn-primary mr-2" onClick={(e) => this.add_native()}>Add</button>
               <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
