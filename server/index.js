@@ -37,7 +37,7 @@ app.get('/words', function(req, res) {
 })
 
 // Get word
-app.get('/word/:word', function(req, res) {
+app.get('/word/view/:word', function(req, res) {
   let path = data_path(to_filename(req.params.word));
   if(fs.existsSync(path)) {
     let word_json = JSON.parse(fs.readFileSync(path));
@@ -47,21 +47,33 @@ app.get('/word/:word', function(req, res) {
   }
 })
 
-app.post('/word/create', function(req, res){
+// Create a word
+app.post('/word/set', function(req, res){
   let result = {success: false};
   let word = req.body.word || null;
-  if(word === null) {
-    result.error = "Parameter 'word' is node defined";
+  let json_data = req.body.json_data || null;
+  if(word === null || json_data === null) {
+    result.error = "Undefined parameter 'word' and/or 'json_data'";
     res.json(result);
     return;
   }
   let file_path = data_path(to_filename(word));
-  if(fs.existsSync(file_path)) {
-    result.error = "Word " + word + " already exists";
+  fs.writeFileSync(file_path, json_data);
+  result.success = true;
+  res.json(result);
+});
+
+// Delete a word
+app.get('/word/remove/:word', function(req, res) {
+  let result = {success: false};
+  let word = req.params.word
+  let file_path = data_path(to_filename(word));
+  if(!fs.existsSync(file_path)) {
+    result.error = "Word '" + word + "' not found";
     res.json(result);
     return;
   }
-  fs.writeFileSync(file_path, JSON.stringify({word: word}));
+  fs.unlinkSync(file_path);
   result.success = true;
   res.json(result);
 });
