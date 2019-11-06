@@ -38,7 +38,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                 <label>Sentence</label>
                 <input type="text" className="form-control" id="native"/>
               </div>
-              <button className="btn btn-primary mr-2">Save</button>
+              <button className="btn btn-primary mr-2">Add</button>
               <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
@@ -56,7 +56,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
           <label>Sound</label>
           <input type="text" className="form-control form-control-sm" id="sound"/>
         </div>
-        <button className="btn btn-primary mr-2 btn-sm">Save</button>
+        <button className="btn btn-primary mr-2 btn-sm">Add</button>
         <button className="btn btn-secondary btn-sm" onClick={(e) => this.set_pronunciation_form_hidden(e, id, true)}>Close</button>
       </div>
     );

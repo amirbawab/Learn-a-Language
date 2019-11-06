@@ -1,5 +1,4 @@
 import * as React from 'react';
-import LLPage from './Page';
 
 // Components
 import LLWordTitle from '../components/Title';
@@ -11,33 +10,26 @@ import LLNative from './sections/Native';
 
 // Models
 import LLWordData from '../models/WordData';
-import LLPronunciationData from '../models/PronunciationData';
-import LLExampleData from '../models/ExampleData';
 
-class LLWord extends LLPage {
+export interface LLWordProps {
+  word: LLWordData;
+}
+ 
+export interface LLWordState {}
+ 
+class LLWord extends React.Component<LLWordProps, LLWordState> {
     state = {}
     render() {
-      let data = new LLWordData("Tea");
-      data.add_native("茶");
-      data.add_pronunciation(new LLPronunciationData("English", "Chai"));
-      data.add_pronunciation(new LLPronunciationData("Arabic", "تشاي"));
-
-      let example = new LLExampleData("I want to drink tea");
-      example.add_sound("English", "wo yao chai");
-      example.add_sound("French", "wo yao tchay");
-      data.add_example(example);
-      data.add_example(example);
-
       return (
         <div className="m-2">
           <div className="alert alert-warning" role="alert">
             Click "Save" after done editing 
             <button className="btn btn-primary btn-sm float-right ml-2">Save</button>
           </div>
-          <LLWordTitle title={data.get_word()}/>
-          <LLNative data={data.get_natives()}/>
-          <LLPronunciation data={data.get_pronunciations()}/>
-          <LLExample data={data.get_examples()}/>
+          <LLWordTitle title={this.props.word.get_word()}/>
+          <LLNative data={this.props.word.get_natives()}/>
+          <LLPronunciation data={this.props.word.get_pronunciations()}/>
+          <LLExample data={this.props.word.get_examples()}/>
           <div className="alert alert-warning" role="alert">
             Click "Delete" to remove the word
             <button className="btn btn-danger btn-sm float-right ml-2">Delete</button>

@@ -29,7 +29,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
                 <label>Sound</label>
                 <input type="text" className="form-control" id="sound"/>
               </div>
-              <button className="btn btn-primary mr-2">Save</button>
+              <button className="btn btn-primary mr-2">Add</button>
               <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
@@ -45,7 +45,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
                                   icon={val.get_icon()}>{val.get_sound()}</LLBorderCard>
           })}
 
-          <div className="col-xl-4 col-md-6 mt-4">
+          <div className="col-xl-4 col-md-6 mb-4">
             <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
               <span className="icon text-white-50">
                 <i className="fas fa-plus-square"></i>

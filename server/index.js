@@ -3,9 +3,11 @@ const app = express()
 const port = 3001
 const fs = require('fs')
 const md5 = require('md5')
+const cors = require('cors')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(cors())
 
 var data_dir = "./data";
 

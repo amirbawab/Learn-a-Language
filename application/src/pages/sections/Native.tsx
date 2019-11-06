@@ -24,7 +24,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
                 <label>Native Form</label>
                 <input type="text" className="form-control" id="native"/>
               </div>
-              <button className="btn btn-primary mr-2">Save</button>
+              <button className="btn btn-primary mr-2">Add</button>
               <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
@@ -39,7 +39,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
             return <LLBorderCard  key={id} title="Native form" icon="fas fa-language">{val}</LLBorderCard>
           })}
 
-          <div className="col-xl-4 col-md-6 mt-4">
+          <div className="col-xl-4 col-md-6 mb-4">
             <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
               <span className="icon text-white-50">
                 <i className="fas fa-plus-square"></i>
