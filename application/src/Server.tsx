@@ -4,7 +4,11 @@ import LLExampleData from './models/ExampleData';
 class LLServer {
   constructor(private url: string, private port: number) {}
   get_url(...args: string[]) {
-    return this.url + ":" + this.port + "/" + args.join("/");
+    let url = this.url + ":" + this.port;
+    args.map((val) => {
+      url += "/" + encodeURI(val);
+    });
+    return url;
   }
   get_words(callback: any) {
     fetch(this.get_url('words'), {mode: 'cors'})
@@ -17,6 +21,21 @@ class LLServer {
     .then((json) => {
       callback(LLWordData.from_json(json));
     });
+  }
+  set_word(word: LLWordData, callback: any) {
+    fetch(this.get_url('word','set'), {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        word: word.get_word(),
+        json_data: JSON.stringify(word.to_json()),
+      })
+    }).then(response => {
+      console.log(response)
+    })
   }
 }
 
