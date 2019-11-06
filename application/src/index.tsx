@@ -10,14 +10,29 @@ import LLWordData from './models/WordData';
 var server = new LLServer("http://localhost", 3001);
 
 function saveHandler(word: LLWordData) {
-  console.log(word.to_json());
+  server.set_word(word, (success: boolean) => {
+    if(success) {
+      renderSearchPanel();
+      renderWordPanel(word.get_word());
+    } else {
+      console.error("Failed: Will not set word");
+    }
+  });
+}
+
+function deleteHandler(word: LLWordData) {
+  server.remove_word(word.get_word(), (success: boolean) => {
+    if(success) {
+      renderSearchPanel();
+      ReactDOM.render(<div></div>, document.getElementById('page-content'));
+    } else {
+      console.error("Failed: Will not remove word");
+    }
+  });
 }
 
 function newWordHandler(word: string) {
-  let word_data = new LLWordData(word);
-  server.set_word(word_data, () => {
-    renderSearchPanel();
-  });
+  saveHandler(new LLWordData(word));
 }
 
 function wordSelectHandler(word: string) {
@@ -26,7 +41,11 @@ function wordSelectHandler(word: string) {
 
 function renderWordPanel(word: string) {
   server.get_word(word, (word: LLWordData) => {
-    ReactDOM.render(<LLWord word={word} onSave={saveHandler}/>, document.getElementById('page-content'));
+    ReactDOM.render(<LLWord 
+                        word={word} 
+                        onSave={saveHandler} 
+                        onDelete={deleteHandler}/>, 
+                    document.getElementById('page-content'));
   });
 }
 

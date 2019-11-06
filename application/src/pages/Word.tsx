@@ -14,6 +14,7 @@ import LLWordData from '../models/WordData';
 export interface LLWordProps {
   word: LLWordData;
   onSave: (word: LLWordData) => void;
+  onDelete: (word: LLWordData) => void;
 }
  
 export interface LLWordState {}
@@ -33,7 +34,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
           <LLExample data={this.props.word.get_examples()}/>
           <div className="alert alert-warning" role="alert">
             Click "Delete" to remove the word
-            <button className="btn btn-danger btn-sm float-right ml-2">Delete</button>
+            <button className="btn btn-danger btn-sm float-right ml-2" onClick={() => {this.props.onDelete(this.props.word)}}>Delete</button>
           </div>
         </div>
       );

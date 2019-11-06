@@ -22,7 +22,15 @@ class LLServer {
       callback(LLWordData.from_json(json));
     });
   }
-  set_word(word: LLWordData, callback: any) {
+  remove_word(word: string, callback: (success: boolean) => void) {
+    fetch(this.get_url('word', 'remove', word), {mode: 'cors'})
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json);
+      callback(json.success);
+    });
+  }
+  set_word(word: LLWordData, callback: (success: boolean) => void) {
     fetch(this.get_url('word','set'), {
       method: 'POST',
       headers: {
@@ -33,9 +41,12 @@ class LLServer {
         word: word.get_word(),
         json_data: JSON.stringify(word.to_json()),
       })
-    }).then(response => {
-      console.log(response)
     })
+    .then(response => response.json())
+    .then((json) => {
+      console.log(json)
+      callback(json.success);
+    });
   }
 }
 
