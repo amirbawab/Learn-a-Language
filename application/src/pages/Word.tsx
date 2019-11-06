@@ -30,10 +30,18 @@ class LLWord extends LLPage {
 
       return (
         <div className="m-2">
+          <div className="alert alert-warning" role="alert">
+            Click "Save" after done editing 
+            <button className="btn btn-primary btn-sm float-right ml-2">Save</button>
+          </div>
           <LLWordTitle title={data.get_word()}/>
           <LLNative data={data.get_natives()}/>
           <LLPronunciation data={data.get_pronunciations()}/>
           <LLExample data={data.get_examples()}/>
+          <div className="alert alert-warning" role="alert">
+            Click "Delete" to remove the word
+            <button className="btn btn-danger btn-sm float-right ml-2">Delete</button>
+          </div>
         </div>
       );
     }
