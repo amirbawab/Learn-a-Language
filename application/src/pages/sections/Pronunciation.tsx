@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {LLBorderCard, LLBasicCard} from '../../components/Card';
-import LLPronunciationData from '../../models/PronunciationData';
+import LLSoundData from '../../models/SoundData';
 
 export interface LLPronunciationProps {
-  data: LLPronunciationData[];
+  data: LLSoundData[];
 }
 export interface LLPronunciationState {}
 class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciationState> {
@@ -42,7 +42,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
         <div className="row">
           {this.props.data.map((val, id) => {
             return <LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
-                                  icon={val.get_icon()}>{val.get_sound()}</LLBorderCard>
+                                  icon={"fas fa-microphone-alt"}>{val.get_sound()}</LLBorderCard>
           })}
 
           <div className="col-xl-4 col-md-6 mb-4">

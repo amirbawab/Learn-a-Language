@@ -12,6 +12,15 @@ class LLExampleData {
   public get_sounds() {
     return this.sounds;
   }
+  public to_json() {
+    let json: any = {};
+    json.sentence = this.sentence;
+    json.pronunciation = [];
+    this.sounds.map((val) => {
+      json.pronunciation.push(val.to_json());
+    });
+    return json;
+  }
 }
 
 export default LLExampleData;

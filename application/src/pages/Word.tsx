@@ -13,6 +13,7 @@ import LLWordData from '../models/WordData';
 
 export interface LLWordProps {
   word: LLWordData;
+  onSave: (word: LLWordData) => void;
 }
  
 export interface LLWordState {}
@@ -24,7 +25,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         <div className="m-2">
           <div className="alert alert-warning" role="alert">
             Click "Save" after done editing 
-            <button className="btn btn-primary btn-sm float-right ml-2">Save</button>
+            <button className="btn btn-primary btn-sm float-right ml-2" onClick={() => {this.props.onSave(this.props.word)}}>Save</button>
           </div>
           <LLWordTitle title={this.props.word.get_word()}/>
           <LLNative data={this.props.word.get_natives()}/>

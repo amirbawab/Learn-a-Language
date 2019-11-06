@@ -9,9 +9,13 @@ import LLWordData from './models/WordData';
 
 var server = new LLServer("http://localhost", 3001);
 
+function saveHandler(word: LLWordData) {
+  console.log(word.to_json());
+}
+
 function wordSelectHandler(word: string) {
   server.get_word(word, (word: LLWordData) => {
-    ReactDOM.render(<LLWord word={word}/>, document.getElementById('page-content'));
+    ReactDOM.render(<LLWord word={word} onSave={saveHandler}/>, document.getElementById('page-content'));
   });
 }
 
