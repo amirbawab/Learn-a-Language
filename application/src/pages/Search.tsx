@@ -10,7 +10,8 @@ export interface LLSearchState {}
  
 class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   state = {
-    form_hidden: true
+    form_hidden: true,
+    search_text: ""
   }
 
   set_form_hidden(e: any, is_hidden : boolean) {
@@ -26,6 +27,30 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   onNewWord() {
     let input = this.refs.new_word as HTMLInputElement;
     this.props.onNewWord(input.value);
+  }
+
+  on_search_change() {
+    let input = this.refs.search as HTMLInputElement;
+    this.setState({search_text: input.value});
+  }
+
+  search_includes(word: string) {
+    let search_text = this.state.search_text;
+    if(search_text.length > word.length) {
+      return false;
+    }
+
+    // Letters in the search field must exist
+    // in the target 'word' and in the same order
+    let s_iter = 0;
+    let w_iter = 0;
+    while(s_iter < search_text.length && w_iter < word.length) {
+      if(search_text[s_iter] === word[w_iter]) {
+        s_iter++;
+      }
+      w_iter++;
+    }
+    return s_iter === search_text.length;
   }
 
   render() { 
@@ -45,11 +70,19 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
     return (
       <div>
-        <form className="d-none d-sm-inline-block form-inline mr-md-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <form 
+            className="d-none d-sm-inline-block form-inline mr-md-3 ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+            onSubmit={(e) => e.preventDefault()}>
           <div className="input-group">
-            <input  type="text" className="form-control bg-light border-0 small" placeholder="Search for a word"/>
+            <input  
+                type="text" 
+                ref="search" 
+                value={this.state.search_text}
+                className="form-control bg-light border-0 small" 
+                onChange={() => this.on_search_change()} 
+                placeholder="Search for a word"/>
             <div className="input-group-append">
-              <button className="btn btn-warning" type="button">
+              <button className="btn btn-warning">
                 <i className="fas fa-search fa-sm"></i>
               </button>
             </div>
@@ -68,9 +101,13 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         <hr className="sidebar-divider my-0" />
         {this.props.words.map((word, id) => {
           return (
-            <li key={id} className="nav-item">
-              <a className="nav-link" href="#" onClick={(e) => {this.wordSelect(e, word)}}>{word}</a>
-            </li>
+            <React.Fragment>
+              {this.search_includes(word) ? (
+                <li key={id} className="nav-item">
+                  <a className="nav-link" href="#" onClick={(e) => {this.wordSelect(e, word)}}>{word}</a>
+                </li>
+              ) : undefined}
+            </React.Fragment>
           );
         })}
       </div>
