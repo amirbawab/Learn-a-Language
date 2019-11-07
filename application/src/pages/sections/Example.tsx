@@ -4,6 +4,8 @@ import LLExampleData from '../../models/ExampleData';
 
 export interface LLExampleProps {
   data: LLExampleData[];
+  onAdd: (sentence: string) => void;
+  onExampleUpdate: () => void;
 }
 export interface LLExampleState {}
 class LLExample extends React.Component<LLExampleProps, LLExampleState> {
@@ -27,6 +29,16 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     new_array[id] = is_hidden;
     this.setState({'pronunciation_form_hidden': new_array});
   }
+  add_example() {
+    let input = this.refs.sentence as HTMLInputElement;
+    this.props.onAdd(input.value);
+  }
+  add_example_sound(id: number) {
+    let language_input = this.refs["language_"+id] as HTMLInputElement;
+    let sound_input = this.refs["sound_"+id] as HTMLInputElement;
+    this.props.data[id].add_sound(language_input.value, sound_input.value);
+    this.props.onExampleUpdate();
+  }
   render() {
     let sentence_form = undefined;
     if(!this.state.sentence_form_hidden) {
@@ -36,9 +48,9 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
             <LLBasicCard>
               <div className="form-group">
                 <label>Sentence</label>
-                <input type="text" className="form-control" id="native"/>
+                <input type="text" className="form-control" ref="sentence"/>
               </div>
-              <button className="btn btn-primary mr-2">Add</button>
+              <button className="btn btn-primary mr-2" onClick={(e) => this.add_example()}>Add</button>
               <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(e, true)}>Close</button>
             </LLBasicCard>
           </div>
@@ -50,13 +62,13 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
       <div className="small">
         <div className="form-group">
           <label>Language</label>
-          <input type="text" className="form-control form-control-sm" id="language"/>
+          <input type="text" className="form-control form-control-sm" ref={"language_"+id}/>
         </div>
         <div className="form-group">
           <label>Sound</label>
-          <input type="text" className="form-control form-control-sm" id="sound"/>
+          <input type="text" className="form-control form-control-sm" ref={"sound_"+id}/>
         </div>
-        <button className="btn btn-primary mr-2 btn-sm">Add</button>
+        <button className="btn btn-primary mr-2 btn-sm" onClick={(e) => this.add_example_sound(id)}>Add</button>
         <button className="btn btn-secondary btn-sm" onClick={(e) => this.set_pronunciation_form_hidden(e, id, true)}>Close</button>
       </div>
     );

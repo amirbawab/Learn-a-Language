@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 
+import LLInfo from './pages/Info';
 import LLWord from './pages/Word';
 import LLSearch from './pages/Search';
 import LLServer from './Server';
@@ -24,7 +25,7 @@ function deleteHandler(word: LLWordData) {
   server.remove_word(word.get_word(), (success: boolean) => {
     if(success) {
       renderSearchPanel();
-      ReactDOM.render(<div></div>, document.getElementById('page-content'));
+      renderInfoPanel();
     } else {
       console.error("Failed: Will not remove word");
     }
@@ -39,10 +40,15 @@ function wordSelectHandler(word: string) {
   renderWordPanel(word);
 }
 
+function renderInfoPanel() {
+  ReactDOM.render(<LLInfo/> ,document.getElementById('page-content'));
+}
+
 function renderWordPanel(word: string) {
-  server.get_word(word, (word: LLWordData) => {
+  server.get_word(word, (word_data: LLWordData) => {
     ReactDOM.render(<LLWord 
-                        word={word} 
+                        key={word_data.get_word()}
+                        word={word_data} 
                         onSave={saveHandler} 
                         onDelete={deleteHandler}/>, 
                     document.getElementById('page-content'));
@@ -61,10 +67,8 @@ function renderSearchPanel() {
   });
 }
 
-// Render search panel by default
+// Render default panels
 renderSearchPanel();
-
-
-
+renderInfoPanel();
 
 serviceWorker.unregister();
