@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {LLBasicCard} from '../../components/Card';
+import {LLSplitButton} from '../../components/Button';
 import LLExampleData from '../../models/ExampleData';
 
 export interface LLExampleProps {
@@ -19,9 +20,9 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     sentence_form_hidden: true,
     pronunciation_form_hidden: Array()
   }
-  set_sentence_form_hidden(e : any, is_hidden : boolean) {
-    e.preventDefault();
+  set_sentence_form_hidden(is_hidden : boolean) {
     this.setState({'sentence_form_hidden': is_hidden});
+    return false;
   }
   set_pronunciation_form_hidden(e : any, id: number, is_hidden : boolean) {
     e.preventDefault();
@@ -51,7 +52,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                 <input type="text" className="form-control" ref="sentence"/>
               </div>
               <button className="btn btn-primary mr-2" onClick={(e) => this.add_example()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(e, true)}>Close</button>
+              <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(true)}>Close</button>
             </LLBasicCard>
           </div>
         </div>
@@ -98,12 +99,10 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                   </div>
                 );
               })}
-              <a href="#" onClick={(e) => this.set_sentence_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
-                <span className="icon text-white-50">
-                  <i className="fas fa-plus-square"></i>
-                </span>
-                <span className="text">Add Example</span>
-              </a>
+              
+              <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_sentence_form_hidden(false)}>
+                Add Example
+              </LLSplitButton>
             </LLBasicCard>
           </div>
         </div>

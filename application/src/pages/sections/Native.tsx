@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {LLBorderCard, LLBasicCard} from '../../components/Card';
+import {LLSplitButton} from '../../components/Button';
 
 export interface LLNativeProps {
   data: string[];
@@ -10,9 +11,9 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
   state = {
     form_hidden: true,
   }
-  set_form_hidden(e: any, is_hidden : boolean) {
-    e.preventDefault();
+  set_form_hidden(is_hidden : boolean) {
     this.setState({'form_hidden': is_hidden});
+    return false;
   }
   add_native() {
     let input = this.refs.native_form as HTMLInputElement;
@@ -30,7 +31,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
                 <input type="text" className="form-control" ref="native_form"/>
               </div>
               <button className="btn btn-primary mr-2" onClick={(e) => this.add_native()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
+              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(true)}>Close</button>
             </LLBasicCard>
           </div>
         </div>
@@ -45,12 +46,9 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
           })}
 
           <div className="col-xl-4 col-md-6 mb-4">
-            <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
-              <span className="icon text-white-50">
-                <i className="fas fa-plus-square"></i>
-              </span>
-              <span className="text">Add Native Form</span>
-            </a>
+            <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
+              Add Native Form
+            </LLSplitButton>
           </div>
         </div>
         {form}

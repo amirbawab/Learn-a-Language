@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {LLBorderCard, LLBasicCard} from '../../components/Card';
 import LLSoundData from '../../models/SoundData';
+import {LLSplitButton} from '../../components/Button';
 
 export interface LLPronunciationProps {
   data: LLSoundData[];
@@ -11,9 +12,9 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
   state = {
     form_hidden: true
   }
-  set_form_hidden(e: any, is_hidden : boolean) {
-    e.preventDefault();
+  set_form_hidden(is_hidden : boolean) {
     this.setState({'form_hidden': is_hidden});
+    return false;
   }
   add_pronunciation() {
     let language_input = this.refs.language as HTMLInputElement;
@@ -36,7 +37,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
                 <input type="text" className="form-control" ref="sound"/>
               </div>
               <button className="btn btn-primary mr-2" onClick={(e) => this.add_pronunciation()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(e, true)}>Close</button>
+              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(true)}>Close</button>
             </LLBasicCard>
           </div>
         </div>
@@ -52,12 +53,9 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
           })}
 
           <div className="col-xl-4 col-md-6 mb-4">
-            <a href="#" onClick={(e) => this.set_form_hidden(e, false)} className="btn btn-primary btn-icon-split">
-              <span className="icon text-white-50">
-                <i className="fas fa-plus-square"></i>
-              </span>
-              <span className="text">Add Pronunciation</span>
-            </a>
+            <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
+              Add Pronunciation
+            </LLSplitButton>
           </div>
         </div>
         {form}
