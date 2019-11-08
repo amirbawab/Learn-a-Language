@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {LLBasicCard} from '../../components/Card';
-import {LLSplitButton} from '../../components/Button';
+import {LLSplitButton, LLBasicButton} from '../../components/Button';
+import {LLLabelInput} from '../../components/Input';
+import {LLOkCancelForm} from '../../components/Form';
 import LLExampleData from '../../models/ExampleData';
 
 export interface LLExampleProps {
@@ -10,12 +12,6 @@ export interface LLExampleProps {
 }
 export interface LLExampleState {}
 class LLExample extends React.Component<LLExampleProps, LLExampleState> {
-  constructor(props: LLExampleProps) {
-    super(props);
-    this.props.data.map((example, example_id) => {
-      this.state.pronunciation_form_hidden.push(true);
-    });
-  }
   state = {
     sentence_form_hidden: true,
     pronunciation_form_hidden: Array()
@@ -25,19 +21,22 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     return false;
   }
   set_pronunciation_form_hidden(e : any, id: number, is_hidden : boolean) {
-    e.preventDefault();
-    let new_array = Array.from(this.state.pronunciation_form_hidden)
-    new_array[id] = is_hidden;
-    this.setState({'pronunciation_form_hidden': new_array});
+    if(e !== null) {
+      e.preventDefault();
+    }
+    this.state.pronunciation_form_hidden[id] = is_hidden;
+    this.setState(this.state);
   }
   add_example() {
-    let input = this.refs.sentence as HTMLInputElement;
-    this.props.onAdd(input.value);
+    console.log(this.refs)
+    let input = this.refs.sentence as LLLabelInput
+    this.props.onAdd(input.value());
+    return false;
   }
   add_example_sound(id: number) {
-    let language_input = this.refs["language_"+id] as HTMLInputElement;
-    let sound_input = this.refs["sound_"+id] as HTMLInputElement;
-    this.props.data[id].add_sound(language_input.value, sound_input.value);
+    let language_input = this.refs["language_"+id] as LLLabelInput;
+    let sound_input = this.refs["sound_"+id] as LLLabelInput;
+    this.props.data[id].add_sound(language_input.value(), sound_input.value());
     this.props.onExampleUpdate();
   }
   render() {
@@ -47,12 +46,13 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
         <div className="row">
           <div className="col-lg-12">
             <LLBasicCard>
-              <div className="form-group">
-                <label>Sentence</label>
-                <input type="text" className="form-control" ref="sentence"/>
-              </div>
-              <button className="btn btn-primary mr-2" onClick={(e) => this.add_example()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_sentence_form_hidden(true)}>Close</button>
+              <LLOkCancelForm 
+                  ok_name="Add" 
+                  cancel_name="Close" 
+                  on_ok={() => this.add_example()} 
+                  on_cancel={() => this.set_sentence_form_hidden(true)}>
+                <LLLabelInput ref="sentence" label="Sentence"/>
+              </LLOkCancelForm>
             </LLBasicCard>
           </div>
         </div>
@@ -60,18 +60,14 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     }
 
     let sound_form = (id : number) => (
-      <div className="small">
-        <div className="form-group">
-          <label>Language</label>
-          <input type="text" className="form-control form-control-sm" ref={"language_"+id}/>
-        </div>
-        <div className="form-group">
-          <label>Sound</label>
-          <input type="text" className="form-control form-control-sm" ref={"sound_"+id}/>
-        </div>
-        <button className="btn btn-primary mr-2 btn-sm" onClick={(e) => this.add_example_sound(id)}>Add</button>
-        <button className="btn btn-secondary btn-sm" onClick={(e) => this.set_pronunciation_form_hidden(e, id, true)}>Close</button>
-      </div>
+      <LLOkCancelForm 
+          ok_name="Add" 
+          cancel_name="Close" 
+          on_ok={() => this.add_example_sound(id)} 
+          on_cancel={() => this.set_pronunciation_form_hidden(null, id, true)}>
+        <LLLabelInput ref={"language_"+id} label="Language"/>
+        <LLLabelInput ref={"sound_"+id} label="Sound"/>
+      </LLOkCancelForm>
     );
 
     return (
@@ -94,7 +90,9 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                     <a href="#" onClick={(e) => this.set_pronunciation_form_hidden(e, example_id, false)}>
                       <i className="fas fa-plus-square"></i> Add Pronunciation
                     </a>
-                    {this.state.pronunciation_form_hidden[example_id] ? undefined : sound_form(example_id)}
+                    {this.state.pronunciation_form_hidden[example_id] 
+                      || example_id >= this.state.pronunciation_form_hidden.length ? 
+                      undefined : sound_form(example_id)}
                     <div className="border-top my-3"></div>
                   </div>
                 );

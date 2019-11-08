@@ -2,6 +2,8 @@ import * as React from 'react';
 import {LLBorderCard, LLBasicCard} from '../../components/Card';
 import LLSoundData from '../../models/SoundData';
 import {LLSplitButton} from '../../components/Button';
+import {LLOkCancelForm} from '../../components/Form';
+import {LLLabelInput} from '../../components/Input';
 
 export interface LLPronunciationProps {
   data: LLSoundData[];
@@ -17,9 +19,9 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
     return false;
   }
   add_pronunciation() {
-    let language_input = this.refs.language as HTMLInputElement;
-    let sound_input = this.refs.sound as HTMLInputElement;
-    this.props.onAdd(language_input.value, sound_input.value);
+    let language_input = this.refs.language as LLLabelInput;
+    let sound_input = this.refs.sound as LLLabelInput;
+    this.props.onAdd(language_input.value(), sound_input.value());
   }
   render() {
     let form = undefined;
@@ -28,16 +30,14 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
         <div className="row">
           <div className="col-lg-12">
             <LLBasicCard>
-              <div className="form-group">
-                <label>Language</label>
-                <input type="text" className="form-control" ref="language"/>
-              </div>
-              <div className="form-group">
-                <label>Sound</label>
-                <input type="text" className="form-control" ref="sound"/>
-              </div>
-              <button className="btn btn-primary mr-2" onClick={(e) => this.add_pronunciation()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(true)}>Close</button>
+              <LLOkCancelForm 
+                  ok_name="Add" 
+                  cancel_name="Close" 
+                  on_ok={() => this.add_pronunciation()} 
+                  on_cancel={() => this.set_form_hidden(true)}>
+                <LLLabelInput ref="language" label="Language"/>
+                <LLLabelInput ref="sound" label="Sound"/>
+              </LLOkCancelForm>
             </LLBasicCard>
           </div>
         </div>

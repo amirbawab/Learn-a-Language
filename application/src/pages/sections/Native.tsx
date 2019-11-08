@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {LLBorderCard, LLBasicCard} from '../../components/Card';
 import {LLSplitButton} from '../../components/Button';
+import {LLOkCancelForm} from '../../components/Form';
+import {LLLabelInput} from '../../components/Input';
 
 export interface LLNativeProps {
   data: string[];
@@ -16,8 +18,8 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
     return false;
   }
   add_native() {
-    let input = this.refs.native_form as HTMLInputElement;
-    this.props.onAdd(input.value);
+    let input = this.refs.native_form as LLLabelInput;
+    this.props.onAdd(input.value());
   }
   render() {
     let form = undefined;
@@ -26,12 +28,13 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
         <div className="row">
           <div className="col-lg-12">
             <LLBasicCard>
-              <div className="form-group">
-                <label>Native Form</label>
-                <input type="text" className="form-control" ref="native_form"/>
-              </div>
-              <button className="btn btn-primary mr-2" onClick={(e) => this.add_native()}>Add</button>
-              <button className="btn btn-secondary" onClick={(e) => this.set_form_hidden(true)}>Close</button>
+              <LLOkCancelForm 
+                  ok_name="Add" 
+                  cancel_name="Close" 
+                  on_ok={() => this.add_native()} 
+                  on_cancel={() => this.set_form_hidden(true)}>
+                <LLLabelInput ref="native_form" label="Native Form"/>
+              </LLOkCancelForm>
             </LLBasicCard>
           </div>
         </div>
