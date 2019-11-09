@@ -7,7 +7,8 @@ import {LLLabelInput} from '../../components/Input';
 
 export interface LLPronunciationProps {
   data: LLSoundData[];
-  onAdd: (language: string, sound: string) => void;
+  on_add: (language: string, sound: string) => void;
+  on_delete: (id: number) => void;
 }
 export interface LLPronunciationState {}
 class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciationState> {
@@ -21,7 +22,11 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
   add_pronunciation() {
     let language_input = this.refs.language as LLLabelInput;
     let sound_input = this.refs.sound as LLLabelInput;
-    this.props.onAdd(language_input.value(), sound_input.value());
+    this.props.on_add(language_input.value(), sound_input.value());
+  }
+  delete_pronunciation(e: any, id: number) {
+    e.preventDefault();
+    this.props.on_delete(id);
   }
   render() {
     let form = undefined;
@@ -48,8 +53,13 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
       <div>
         <div className="row">
           {this.props.data.map((val, id) => {
-            return <LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
-                                  icon={"fas fa-microphone-alt"}>{val.get_sound()}</LLBorderCard>
+            return (<LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
+                                  icon={"fas fa-microphone-alt"}>
+              {val.get_sound()}
+              <a href="#" onClick={(e)=>{this.delete_pronunciation(e, id)}}>
+                <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE</div>
+              </a>
+            </LLBorderCard>);
           })}
 
           <div className="col-xl-4 col-md-6 mb-4">

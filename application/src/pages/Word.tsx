@@ -27,12 +27,22 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
 
   add_native_handler(form: string) {
     this.state.word.add_native(form);
-    this.setState({word: this.state.word});
+    this.setState(this.state);
+  }
+
+  delete_native_handler(id: number) {
+    this.state.word.delete_native(id);
+    this.setState(this.state);
   }
 
   add_pronunciation_handler(language: string, sound: string) {
     this.state.word.add_pronunciation(language, sound);
-    this.setState({word: this.state.word});
+    this.setState(this.state);
+  }
+
+  delete_pronunciation_handler(id: number) {
+    this.state.word.delete_pronunciation(id);
+    this.setState(this.state);
   }
 
   add_example_handler(sentence: string) {
@@ -54,10 +64,12 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </div>
         <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
         <LLNative
-              onAdd={(form) => this.add_native_handler(form)} 
+              on_add={(form) => this.add_native_handler(form)} 
+              on_delete={(id) => this.delete_native_handler(id)} 
               data={this.state.word.get_natives()}/>
         <LLPronunciation  
-              onAdd={(language, sound) => this.add_pronunciation_handler(language, sound)} 
+              on_add={(language, sound) => this.add_pronunciation_handler(language, sound)} 
+              on_delete={(id) => this.delete_pronunciation_handler(id)} 
               data={this.state.word.get_pronunciations()}/>
         <LLExample 
               onAdd={(sentence) => this.add_example_handler(sentence)}

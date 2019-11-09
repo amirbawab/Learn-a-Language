@@ -9,6 +9,9 @@ class LLWordData {
   public add_pronunciation(language: string, sound: string) {
     this.pronunciations.push(new LLSoundData(language, sound));
   }
+  public delete_pronunciation(id: number) {
+    this.pronunciations.splice(id, 1);
+  }
   public get_pronunciations() {
     return this.pronunciations;
   }
@@ -23,6 +26,9 @@ class LLWordData {
   }
   public add_native(native_form: string) {
     this.natives.push(native_form);
+  }
+  public delete_native(id: number) {
+    this.natives.splice(id, 1);
   }
   public get_natives() {
     return this.natives;
