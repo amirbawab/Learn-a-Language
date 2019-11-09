@@ -1,6 +1,7 @@
 FROM node:12.13.0
 WORKDIR /usr/src/app
 
+COPY ./run_app.sh ./run_app.sh
 COPY ./application ./application
 COPY ./server ./server
 

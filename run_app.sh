@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd server/ && (npm start &) && echo "Server started"
-cd ../application/ && (npm start &) && echo "Client started"
+cd server/ && (npm start &)
+cd ../application/ && npm start
