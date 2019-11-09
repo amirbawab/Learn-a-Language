@@ -9,6 +9,9 @@ class LLExampleData {
   public add_sound(language: string, sound: string) {
     this.sounds.push(new LLSoundData(language, sound));
   }
+  public delete_sound(id: number) {
+    this.sounds.splice(id, 1);
+  }
   public get_sounds() {
     return this.sounds;
   }

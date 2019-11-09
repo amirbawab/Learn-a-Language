@@ -18,6 +18,9 @@ class LLWordData {
   public add_example(example: LLExampleData) {
     this.examples.push(example);
   }
+  public delete_example(id: number) {
+    this.examples.splice(id, 1);
+  }
   public get_examples() {
     return this.examples;
   }

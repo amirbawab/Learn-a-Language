@@ -48,7 +48,12 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
   add_example_handler(sentence: string) {
     let example = new LLExampleData(sentence);
     this.state.word.add_example(example);
-    this.setState({word: this.state.word});
+    this.setState(this.state);
+  }
+
+  delete_example_handler(id: number) {
+    this.state.word.delete_example(id);
+    this.setState(this.state);
   }
 
   update_example_handler() {
@@ -59,7 +64,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     return (
       <div className="m-2">
         <div className="alert alert-warning" role="alert">
-          Click "Save" after done editing 
+          Click "Save" after done editing, or Refresh to abort the changes.
           <button className="btn btn-primary btn-sm float-right ml-2" onClick={() => {this.props.onSave(this.state.word)}}>Save</button>
         </div>
         <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
@@ -72,7 +77,8 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               on_delete={(id) => this.delete_pronunciation_handler(id)} 
               data={this.state.word.get_pronunciations()}/>
         <LLExample 
-              onAdd={(sentence) => this.add_example_handler(sentence)}
+              on_add={(sentence) => this.add_example_handler(sentence)}
+              on_delete={(id) => this.delete_example_handler(id)}
               onExampleUpdate={() => this.update_example_handler()}
               data={this.state.word.get_examples()}/>
         <div className="alert alert-warning" role="alert">

@@ -7,7 +7,8 @@ import LLExampleData from '../../models/ExampleData';
 
 export interface LLExampleProps {
   data: LLExampleData[];
-  onAdd: (sentence: string) => void;
+  on_add: (sentence: string) => void;
+  on_delete: (id: number) => void;
   onExampleUpdate: () => void;
 }
 export interface LLExampleState {}
@@ -28,15 +29,23 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     this.setState(this.state);
   }
   add_example() {
-    console.log(this.refs)
     let input = this.refs.sentence as LLLabelInput
-    this.props.onAdd(input.value());
+    this.props.on_add(input.value());
     return false;
+  }
+  delete_example(e: any, id: number) {
+    e.preventDefault();
+    this.props.on_delete(id);
   }
   add_example_sound(id: number) {
     let language_input = this.refs["language_"+id] as LLLabelInput;
     let sound_input = this.refs["sound_"+id] as LLLabelInput;
     this.props.data[id].add_sound(language_input.value(), sound_input.value());
+    this.props.onExampleUpdate();
+  }
+  delete_example_sound(e: any, example_id: number, sound_id: number) {
+    e.preventDefault();
+    this.props.data[example_id].delete_sound(sound_id);
     this.props.onExampleUpdate();
   }
   render() {
@@ -83,6 +92,9 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                       return (
                         <div key={sound_id}>
                           <span className="text-primary mr-2">[{sound.get_language()} Pronunciation]</span>
+                          <a href="#" onClick={(e) => {this.delete_example_sound(e, example_id, sound_id)}}>
+                            <span className="text-danger mr-2">[Delete]</span>
+                          </a>
                           <span>{sound.get_sound()}</span>
                         </div>
                       );
@@ -93,6 +105,9 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                     {this.state.pronunciation_form_hidden[example_id] 
                       || example_id >= this.state.pronunciation_form_hidden.length ? 
                       undefined : sound_form(example_id)}
+                    <a href="#" onClick={(e)=>{this.delete_example(e, example_id)}}>
+                      <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE EXAMPLE</div>
+                    </a>
                     <div className="border-top my-3"></div>
                   </div>
                 );
