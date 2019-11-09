@@ -1,11 +1,10 @@
 import LLWordData from './models/WordData';
-import LLExampleData from './models/ExampleData';
 
 class LLServer {
   constructor(private url: string, private port: number) {}
   get_url(...args: string[]) {
     let url = this.url + ":" + this.port;
-    args.map((val) => {
+    args.forEach((val) => {
       url += "/" + encodeURI(val);
     });
     return url;

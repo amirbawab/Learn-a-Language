@@ -19,7 +19,7 @@ class LLExampleData {
     let json: any = {};
     json.sentence = this.sentence;
     json.pronunciation = [];
-    this.sounds.map((val) => {
+    this.sounds.forEach((val) => {
       json.pronunciation.push(val.to_json());
     });
     return json;

@@ -56,7 +56,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
             return (<LLBorderCard  theme="success" key={id} title={val.get_language() + " Pronunciation"} 
                                   icon={"fas fa-microphone-alt"}>
               {val.get_sound()}
-              <a href="#" onClick={(e)=>{this.delete_pronunciation(e, id)}}>
+              <a href="#/" onClick={(e)=>{this.delete_pronunciation(e, id)}}>
                 <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE</div>
               </a>
             </LLBorderCard>);

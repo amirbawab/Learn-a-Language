@@ -15,7 +15,7 @@ class LLSplitButton extends React.Component<LLSplitButtonProps, LLSplitButtonSta
   }
   render() {
     return (
-      <a href="#" onClick={(e) => this.click_button(e)} className={"btn btn-"+this.props.theme+" btn-icon-split"}>
+      <a href="#/" onClick={(e) => this.click_button(e)} className={"btn btn-"+this.props.theme+" btn-icon-split"}>
         <span className="icon text-white-50">
           <i className={this.props.icon}></i>
         </span>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {LLBasicCard} from '../../components/Card';
-import {LLSplitButton, LLBasicButton} from '../../components/Button';
+import {LLSplitButton} from '../../components/Button';
 import {LLLabelInput} from '../../components/Input';
 import {LLOkCancelForm} from '../../components/Form';
 import LLExampleData from '../../models/ExampleData';
@@ -13,9 +13,10 @@ export interface LLExampleProps {
 }
 export interface LLExampleState {}
 class LLExample extends React.Component<LLExampleProps, LLExampleState> {
+  pronunciation_form_hidden: boolean[] = [];
   state = {
     sentence_form_hidden: true,
-    pronunciation_form_hidden: Array()
+    example: {}
   }
   set_sentence_form_hidden(is_hidden : boolean) {
     this.setState({'sentence_form_hidden': is_hidden});
@@ -25,7 +26,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     if(e !== null) {
       e.preventDefault();
     }
-    this.state.pronunciation_form_hidden[id] = is_hidden;
+    this.pronunciation_form_hidden[id] = is_hidden;
     this.setState(this.state);
   }
   add_example() {
@@ -92,20 +93,20 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                       return (
                         <div key={sound_id}>
                           <span className="text-primary mr-2">[{sound.get_language()} Pronunciation]</span>
-                          <a href="#" onClick={(e) => {this.delete_example_sound(e, example_id, sound_id)}}>
+                          <a href="#/" onClick={(e) => {this.delete_example_sound(e, example_id, sound_id)}}>
                             <span className="text-danger mr-2">[Delete]</span>
                           </a>
                           <span>{sound.get_sound()}</span>
                         </div>
                       );
                     })}</div>
-                    <a href="#" onClick={(e) => this.set_pronunciation_form_hidden(e, example_id, false)}>
+                    <a href="#/" onClick={(e) => this.set_pronunciation_form_hidden(e, example_id, false)}>
                       <i className="fas fa-plus-square"></i> Add Pronunciation
                     </a>
-                    {this.state.pronunciation_form_hidden[example_id] 
-                      || example_id >= this.state.pronunciation_form_hidden.length ? 
+                    {this.pronunciation_form_hidden[example_id] 
+                      || example_id >= this.pronunciation_form_hidden.length ? 
                       undefined : sound_form(example_id)}
-                    <a href="#" onClick={(e)=>{this.delete_example(e, example_id)}}>
+                    <a href="#/" onClick={(e)=>{this.delete_example(e, example_id)}}>
                       <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE EXAMPLE</div>
                     </a>
                     <div className="border-top my-3"></div>

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {LLBasicButton} from './Button'
-import {LLBasicCard} from './Card'
 
 export interface LLOkCancelFormProps {
   ok_name: string;

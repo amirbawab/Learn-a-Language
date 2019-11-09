@@ -53,7 +53,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
             return (
               <LLBorderCard  key={id} theme="info" title="Native form" icon="fas fa-language">
                 {val}
-                <a href="#" onClick={(e)=>{this.delete_native(e, id)}}>
+                <a href="#/" onClick={(e)=>{this.delete_native(e, id)}}>
                   <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE</div>
                 </a>
               </LLBorderCard>

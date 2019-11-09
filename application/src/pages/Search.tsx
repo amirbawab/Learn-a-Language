@@ -100,7 +100,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
-          <a className="nav-link" href="#" onClick={(e) => {this.set_form_hidden(e, false)}}>
+          <a className="nav-link" href="#/" onClick={(e) => {this.set_form_hidden(e, false)}}>
             <i className="fas fa-plus-square"></i> New Word
           </a>
         </li>
@@ -110,10 +110,10 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         <hr className="sidebar-divider my-0" />
         {this.props.words.map((word, id) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={id}>
               {this.search_includes(word) ? (
-                <li key={id} className="nav-item">
-                  <a className="nav-link" href="#" onClick={(e) => {this.wordSelect(e, word)}}>{word}</a>
+                <li className="nav-item">
+                  <a className="nav-link" href="#/" onClick={(e) => {this.wordSelect(e, word)}}>{word}</a>
                 </li>
               ) : undefined}
             </React.Fragment>

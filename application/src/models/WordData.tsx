@@ -39,15 +39,15 @@ class LLWordData {
   public static from_json(json: any) {
     let word_data = new LLWordData(json.word);
 
-    json.native_form.map((val: string) => {
+    json.native_form.forEach((val: string) => {
       word_data.add_native(val);
     });
-    json.pronunciation.map((val: any) => {
+    json.pronunciation.forEach((val: any) => {
       word_data.add_pronunciation(val.language, val.sound);
     });
-    json.example.map((val: any) => {
+    json.example.forEach((val: any) => {
       let example = new LLExampleData(val.sentence);
-      val.pronunciation.map((pval: any) => {
+      val.pronunciation.forEach((pval: any) => {
         example.add_sound(pval.language, pval.sound);
       });
       word_data.add_example(example);
@@ -59,15 +59,15 @@ class LLWordData {
     let json : any = {};
     json.word = this.word;
     json.native_form = [];
-    this.natives.map((val: string) => {
+    this.natives.forEach((val: string) => {
       json.native_form.push(val);
     });
     json.example = [];
-    this.examples.map((val: LLExampleData) => {
+    this.examples.forEach((val: LLExampleData) => {
       json.example.push(val.to_json());
     });
     json.pronunciation = [];
-    this.pronunciations.map((val: LLSoundData) => {
+    this.pronunciations.forEach((val: LLSoundData) => {
       json.pronunciation.push(val.to_json());
     });
     return json;
