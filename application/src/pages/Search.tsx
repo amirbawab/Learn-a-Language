@@ -1,8 +1,10 @@
 import * as React from 'react';
+import {LLOkCancelForm} from '../components/Form';
+import {LLLabelInput} from '../components/Input';
 
 export interface LLSearchProps {
-  onWordSelect: (word: string) => void;
-  onNewWord: (word: string) => void;
+  on_word_select: (word: string) => void;
+  on_new_word: (word: string) => void;
   words: string[];
 }
  
@@ -15,18 +17,20 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   }
 
   set_form_hidden(e: any, is_hidden : boolean) {
-    e.preventDefault();
+    if(e !== null) {
+      e.preventDefault();
+    }
     this.setState({'form_hidden': is_hidden});
   }
 
   wordSelect(e: any, word: string) {
     e.preventDefault();
-    this.props.onWordSelect(word);
+    this.props.on_word_select(word);
   }
 
-  onNewWord() {
-    let input = this.refs.new_word as HTMLInputElement;
-    this.props.onNewWord(input.value);
+  on_new_word() {
+    let input = this.refs.new_word as LLLabelInput;
+    this.props.on_new_word(input.value());
   }
 
   on_search_change() {
@@ -39,6 +43,10 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     if(search_text.length > word.length) {
       return false;
     }
+
+    // Ignore case sensitivity
+    search_text = search_text.toLowerCase();
+    word = word.toLowerCase();
 
     // Letters in the search field must exist
     // in the target 'word' and in the same order
@@ -58,12 +66,13 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     if(!this.state.form_hidden) {
       new_search_form = (
         <div className="small col-md-12 text-white">
-          <div className="form-group">
-            <label>Word</label>
-            <input type="text" className="form-control form-control-sm" ref="new_word"/>
-          </div>
-          <button className="btn btn-primary mr-2 btn-sm" onClick={(e) => {this.onNewWord()}}>Add</button>
-          <button className="btn btn-secondary btn-sm" onClick={(e) => {this.set_form_hidden(e, true)}}>Close</button>
+          <LLOkCancelForm 
+              ok_name="Add" 
+              cancel_name="Close" 
+              on_ok={() => this.on_new_word()} 
+              on_cancel={() => this.set_form_hidden(null, true)}>
+            <LLLabelInput ref="new_word" label="Word"/>
+          </LLOkCancelForm>
         </div>
       );
     }

@@ -51,7 +51,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
         <div className="row">
           {this.props.data.map((val, id) => {
             return (
-              <LLBorderCard  key={id} title="Native form" icon="fas fa-language">
+              <LLBorderCard  key={id} theme="info" title="Native form" icon="fas fa-language">
                 {val}
                 <a href="#" onClick={(e)=>{this.delete_native(e, id)}}>
                   <div className={"text-xs font-weight-bold text-danger text-uppercase mt-2"}>DELETE</div>
@@ -59,9 +59,10 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
               </LLBorderCard>
             );
           })}
-
+        </div>
+        <div className="row">
           <div className="col-xl-4 col-md-6 mb-4">
-            <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
+            <LLSplitButton theme="info" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
               Add Native Form
             </LLSplitButton>
           </div>

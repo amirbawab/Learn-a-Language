@@ -61,8 +61,8 @@ function renderSearchPanel() {
     // Render search
     ReactDOM.render(<LLSearch 
                         words={words} 
-                        onWordSelect={wordSelectHandler} 
-                        onNewWord={newWordHandler}/>, 
+                        on_word_select={wordSelectHandler} 
+                        on_new_word={newWordHandler}/>, 
                     document.getElementById('search-panel'));
   });
 }

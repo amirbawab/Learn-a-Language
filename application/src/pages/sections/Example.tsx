@@ -113,10 +113,14 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                 );
               })}
               
-              <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_sentence_form_hidden(false)}>
-                Add Example
-              </LLSplitButton>
             </LLBasicCard>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xl-4 col-md-6 mb-4">
+            <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_sentence_form_hidden(false)}>
+              Add Example
+            </LLSplitButton>
           </div>
         </div>
         {sentence_form}

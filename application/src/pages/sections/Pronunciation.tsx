@@ -53,7 +53,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
       <div>
         <div className="row">
           {this.props.data.map((val, id) => {
-            return (<LLBorderCard  key={id} title={val.get_language() + " Pronunciation"} 
+            return (<LLBorderCard  theme="success" key={id} title={val.get_language() + " Pronunciation"} 
                                   icon={"fas fa-microphone-alt"}>
               {val.get_sound()}
               <a href="#" onClick={(e)=>{this.delete_pronunciation(e, id)}}>
@@ -61,9 +61,10 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
               </a>
             </LLBorderCard>);
           })}
-
+        </div>
+        <div className="row">
           <div className="col-xl-4 col-md-6 mb-4">
-            <LLSplitButton theme="primary" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
+            <LLSplitButton theme="success" icon="fas fa-plus-square" on_click={() => this.set_form_hidden(false)}>
               Add Pronunciation
             </LLSplitButton>
           </div>
