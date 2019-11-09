@@ -14,8 +14,8 @@ import LLExampleData from '../models/ExampleData';
 
 export interface LLWordProps {
   word: LLWordData;
-  onSave: (word: LLWordData) => void;
   onDelete: (word: LLWordData) => void;
+  onEdit: (word: LLWordData) => void;
 }
  
 export interface LLWordState {}
@@ -25,48 +25,49 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     word: this.props.word
   }
 
+  update_word() {
+    this.setState(this.state);
+    this.props.onEdit(this.state.word);
+  }
+
   add_native_handler(form: string) {
     this.state.word.add_native(form);
-    this.setState(this.state);
+    this.update_word();
   }
 
   delete_native_handler(id: number) {
     this.state.word.delete_native(id);
-    this.setState(this.state);
+    this.update_word();
   }
 
   add_pronunciation_handler(language: string, sound: string) {
     this.state.word.add_pronunciation(language, sound);
-    this.setState(this.state);
+    this.update_word();
   }
 
   delete_pronunciation_handler(id: number) {
     this.state.word.delete_pronunciation(id);
-    this.setState(this.state);
+    this.update_word();
   }
 
   add_example_handler(sentence: string) {
     let example = new LLExampleData(sentence);
     this.state.word.add_example(example);
-    this.setState(this.state);
+    this.update_word();
   }
 
   delete_example_handler(id: number) {
     this.state.word.delete_example(id);
-    this.setState(this.state);
+    this.update_word();
   }
 
   update_example_handler() {
-    this.setState({word: this.state.word});
+    this.update_word();
   }
 
   render() {
     return (
       <div className="m-2">
-        <div className="alert alert-warning" role="alert">
-          Click "Save" after done editing, or Refresh to abort the changes.
-          <button className="btn btn-primary btn-sm float-right ml-2" onClick={() => {this.props.onSave(this.state.word)}}>Save</button>
-        </div>
         <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
         <LLNative
               on_add={(form) => this.add_native_handler(form)} 
