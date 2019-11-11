@@ -5,6 +5,7 @@ import {LLLabelInput} from '../components/Input';
 export interface LLSearchProps {
   on_word_select: (word: string) => void;
   on_new_word: (word: string) => void;
+  on_flashcard: () => void;
   words: string[];
 }
  
@@ -22,8 +23,13 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     }
     this.setState({'form_hidden': is_hidden});
   }
+  
+  flashcard_mode(e: any) {
+    e.preventDefault();
+    this.props.on_flashcard();
+  }
 
-  wordSelect(e: any, word: string) {
+  word_select(e: any, word: string) {
     e.preventDefault();
     this.props.on_word_select(word);
   }
@@ -105,6 +111,13 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
           </a>
         </li>
 
+        <hr className="sidebar-divider my-0" />
+        <li className="nav-item">
+          <a className="nav-link" href="#/" onClick={(e) => {this.flashcard_mode(e)}}>
+            <i className="fas fa-comment-alt"></i> Flashcard
+          </a>
+        </li>
+
         {new_search_form}
 
         <hr className="sidebar-divider my-0" />
@@ -113,7 +126,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
             <React.Fragment key={id}>
               {this.search_includes(word) ? (
                 <li className="nav-item">
-                  <a className="nav-link" href="#/" onClick={(e) => {this.wordSelect(e, word)}}>{word}</a>
+                  <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word}</a>
                 </li>
               ) : undefined}
             </React.Fragment>

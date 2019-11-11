@@ -70,14 +70,17 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
       <div className="m-2">
         <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
         <LLNative
+              read_only={false}
               on_add={(form) => this.add_native_handler(form)} 
               on_delete={(id) => this.delete_native_handler(id)} 
               data={this.state.word.get_natives()}/>
         <LLPronunciation  
+              read_only={false}
               on_add={(language, sound) => this.add_pronunciation_handler(language, sound)} 
               on_delete={(id) => this.delete_pronunciation_handler(id)} 
               data={this.state.word.get_pronunciations()}/>
         <LLExample 
+              read_only={false}
               on_add={(sentence) => this.add_example_handler(sentence)}
               on_delete={(id) => this.delete_example_handler(id)}
               onExampleUpdate={() => this.update_example_handler()}

@@ -5,9 +5,11 @@ import * as serviceWorker from './serviceWorker';
 import LLInfo from './pages/Info';
 import LLWord from './pages/Word';
 import LLSearch from './pages/Search';
+import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
 import LLServer from './Server';
 import LLWordData from './models/WordData';
+import LLUtils from './Utils';
 
 var server = new LLServer("http://localhost", 3001);
 
@@ -83,12 +85,37 @@ function wordUpdatedHandler(word: LLWordData) {
   saveNotification(word, "Click 'Save' after done editing, or Refresh to abort the changes");
 }
 
+function flashcard_handler() {
+  render_flashcard_panel();
+}
+
+function flashcard_show_word_handler(word: string, callback: (word: LLWordData) => void) {
+  server.get_word(word, (word_data: LLWordData) => {
+    if(word_data !== null) {
+      callback(word_data);
+    } else {
+      errorNotification("Failed to load flashcard word '" + word + "'");
+    }
+  });
+}
+
 /**
  * Render functions
  */
 
 function renderInfoPanel() {
   ReactDOM.render(<LLInfo/> ,document.getElementById('page-content'));
+}
+
+function render_flashcard_panel() {
+  server.get_words((words: string[]) => {
+    if(words !== null) {
+      LLUtils.shuffle(words);
+      ReactDOM.render(<LLFlashcard words={words} on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
+    } else {
+      errorNotification("Failed to load list of words from server");
+    }
+  });
 }
 
 function renderWordPanel(word: string) {
@@ -112,6 +139,7 @@ function renderSearchPanel() {
       ReactDOM.render(<LLSearch 
                           words={words} 
                           on_word_select={wordSelectHandler} 
+                          on_flashcard={flashcard_handler} 
                           on_new_word={newWordHandler}/>, 
                       document.getElementById('search-panel'));
     } else {

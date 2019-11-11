@@ -4,6 +4,7 @@ export interface LLSplitButtonProps {
   icon: string;
   theme: string;
   on_click: () => boolean;
+  extra_class?: string;
 }
 export interface LLSplitButtonState {}
 
@@ -14,8 +15,12 @@ class LLSplitButton extends React.Component<LLSplitButtonProps, LLSplitButtonSta
     }
   }
   render() {
+    let class_val = "btn btn-"+this.props.theme + " btn-icon-split";
+    if(this.props.extra_class) {
+      class_val += " " + this.props.extra_class;
+    }
     return (
-      <a href="#/" onClick={(e) => this.click_button(e)} className={"btn btn-"+this.props.theme+" btn-icon-split"}>
+      <a href="#/" onClick={(e) => this.click_button(e)} className={class_val}>
         <span className="icon text-white-50">
           <i className={this.props.icon}></i>
         </span>
