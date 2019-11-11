@@ -68,9 +68,9 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   }
 
   render() { 
-    let new_search_form = undefined;
+    let new_word_form = undefined;
     if(!this.state.form_hidden) {
-      new_search_form = (
+      new_word_form = (
         <div className="small col-md-12 text-white">
           <LLOkCancelForm 
               ok_name="Add" 
@@ -110,17 +110,17 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
             <i className="fas fa-plus-square"></i> New Word
           </a>
         </li>
-
         <hr className="sidebar-divider my-0" />
+
+        {new_word_form}
+
         <li className="nav-item">
           <a className="nav-link" href="#/" onClick={(e) => {this.flashcard_mode(e)}}>
             <i className="fas fa-comment-alt"></i> Flashcard
           </a>
         </li>
-
-        {new_search_form}
-
         <hr className="sidebar-divider my-0" />
+
         {this.props.words.map((word, id) => {
           return (
             <React.Fragment key={id}>

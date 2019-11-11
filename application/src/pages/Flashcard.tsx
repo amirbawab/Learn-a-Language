@@ -15,14 +15,31 @@ export interface LLFlashcardState {}
  
 class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
   index: number = 0;
-  state: {word: LLWordData | null} = {
-    word: null
+  state: {
+    word: LLWordData | null;
+    hide_native: boolean;
+    hide_pronunciation: boolean;
+    hide_example: boolean;
+  } = {
+    word: null,
+    hide_native: true,
+    hide_pronunciation: true,
+    hide_example: true
+  }
+
+  new_word(word: LLWordData) {
+    this.setState({
+      word: word,
+      hide_native: true,
+      hide_pronunciation: true,
+      hide_example: true
+    });
   }
 
   next() {
     if(this.props.words.length > 0) {
       this.props.on_show_word(this.props.words[this.index++], (word: LLWordData) => {
-        this.setState({word: word});
+        this.new_word(word);
       });
       this.index %= this.props.words.length;
     }
@@ -32,12 +49,27 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
   previous() {
     if(this.props.words.length > 0) {
       this.props.on_show_word(this.props.words[this.index--], (word: LLWordData) => {
-        this.setState({word: word});
+        this.new_word(word);
       });
       if(this.index === -1) {
         this.index = this.props.words.length - 1;
       }
     }
+    return false;
+  }
+
+  show_native() {
+    this.setState({hide_native: false});
+    return false;
+  }
+
+  show_pronunciation() {
+    this.setState({hide_pronunciation: false});
+    return false;
+  }
+  
+  show_example() {
+    this.setState({hide_example: false});
     return false;
   }
 
@@ -52,7 +84,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
             <LLBasicCard>
               <div className="col-xl-12 col-md-12 mb-4 text-center">
                 <div className="mb-4">Click "Start" to begin the Flashcard exercise</div>
-                <LLSplitButton theme="primary" icon="fas fa-play" on_click={() => this.next()}>
+                <LLSplitButton theme="secondary" icon="fas fa-play" on_click={() => this.next()}>
                   Start
                 </LLSplitButton>
               </div>
@@ -61,25 +93,82 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
         </div>
       );
     } else {
-      main_page = (
-        <React.Fragment>
-          <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
+
+      let native_section = undefined;
+      let pronunciation_section = undefined;
+      let example_section = undefined;
+      if(!this.state.hide_native) {
+        native_section = (
           <LLNative
                 read_only={true}
                 on_add={() => {}} 
                 on_delete={() => {}} 
                 data={this.state.word.get_natives()}/>
-        <LLPronunciation  
-              read_only={true}
-              on_add={() => {}} 
-              on_delete={() => {}} 
-              data={this.state.word.get_pronunciations()}/>
-        <LLExample 
-              read_only={true}
-              on_add={() => {}}
-              on_delete={() => {}}
-              onExampleUpdate={() => {}}
-              data={this.state.word.get_examples()}/>
+        );
+      }
+
+      if(!this.state.hide_pronunciation) {
+        pronunciation_section = (
+          <LLPronunciation  
+                read_only={true}
+                on_add={() => {}} 
+                on_delete={() => {}} 
+                data={this.state.word.get_pronunciations()}/>
+        ); 
+      }
+
+      if(!this.state.hide_example) {
+        example_section = (
+          <LLExample 
+                read_only={true}
+                on_add={() => {}}
+                on_delete={() => {}}
+                onExampleUpdate={() => {}}
+                data={this.state.word.get_examples()}/>
+        );
+      }
+
+      main_page = (
+        <React.Fragment>
+          <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <LLSplitButton 
+                  theme="info" 
+                  icon="fas fa-eye" 
+                  extra_class={this.state.word.get_natives().length === 0 ? "disabled" : ""}
+                  on_click={() => this.show_native()}>
+                Show Native Form
+              </LLSplitButton>
+            </div>
+          </div>
+          {native_section}
+
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <LLSplitButton 
+                  theme="success" 
+                  icon="fas fa-eye" 
+                  extra_class={this.state.word.get_pronunciations().length === 0 ? "disabled" : ""}
+                  on_click={() => this.show_pronunciation()}>
+                Show Pronunciation
+              </LLSplitButton>
+            </div>
+          </div>
+          {pronunciation_section}
+
+          <div className="row">
+            <div className="col-lg-12 mb-4">
+              <LLSplitButton 
+                  theme="primary" 
+                  icon="fas fa-eye" 
+                  extra_class={this.state.word.get_examples().length === 0 ? "disabled" : ""}
+                  on_click={() => this.show_example()}>
+                Show Example
+              </LLSplitButton>
+            </div>
+          </div>
+          {example_section}
         </React.Fragment>
       );
     }
@@ -90,7 +179,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
         <div className="row">
           <div className="col-xl-6 col-md-6 mb-4">
             <LLSplitButton 
-                theme="primary" 
+                theme="secondary" 
                 icon="fas fa-arrow-left" 
                 extra_class={btn_class}
                 on_click={() => this.previous()}>
@@ -99,7 +188,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
           </div>
           <div className="col-xl-6 col-md-6 mb-4 text-right">
             <LLSplitButton 
-                theme="primary" 
+                theme="secondary" 
                 icon="fas fa-arrow-right" 
                 extra_class={btn_class}
                 on_click={() => this.next()}>
