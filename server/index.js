@@ -1,15 +1,30 @@
 const express = require('express')
 const app = express()
-const port = 3001
 const fs = require('fs')
 const md5 = require('md5')
 const cors = require('cors')
+const prop_reader = require('properties-reader')
+
+// Set server properties
+var port = 3001
+var data_dir = "./data";
+var properties_path = "./server.properties";
+if(fs.existsSync(properties_path)) {
+  let prop = prop_reader(properties_path)
+  let p_port = prop.get('port');
+  let p_data_dir = prop.get('data_dir');
+  if(p_port !== null) {
+    port = p_port;
+  }
+  if(p_data_dir !== null) {
+    data_dir = p_data_dir;
+  }
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
-var data_dir = "./data";
 
 function data_path(file) {
   return data_dir + '/' + file;
@@ -80,4 +95,8 @@ app.get('/word/remove/:word', function(req, res) {
   res.json(result);
 });
 
-app.listen(port, () => console.log(`Server listening on port ${port} ...`))
+app.listen(port, () => {
+  console.log("Server running ...");
+  console.log("Port: " + port)
+  console.log("Data directory: " + data_dir)
+})
