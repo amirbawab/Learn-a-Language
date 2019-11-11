@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export interface LLLabelInputProps {
   label: string;
+  text?: string;
 }
 export interface LLLabelInputState {}
 
@@ -14,7 +15,7 @@ class LLLabelInput extends React.Component<LLLabelInputProps, LLLabelInputState>
     return (
       <div className="form-group">
         <label>{this.props.label}</label>
-        <input type="text" className="form-control" ref="input"/>
+        <input type="text" className="form-control" ref="input" defaultValue={this.props.text}/>
       </div>
     );
   }

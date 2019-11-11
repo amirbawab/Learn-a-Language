@@ -11,7 +11,9 @@ import LLServer from './Server';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
 
-var server = new LLServer("http://localhost", 3001);
+var server_url = "http://localhost";
+var server_port = "3001";
+var server = new LLServer(server_url, server_port);
 
 /**
  * Notification functions
@@ -89,6 +91,12 @@ function flashcard_handler() {
   render_flashcard_panel();
 }
 
+function server_update_handler(url: string, port: string) {
+  server.set_url(url, port);
+  renderSearchPanel();
+  renderInfoPanel();
+}
+
 function flashcard_show_word_handler(word: string, callback: (word: LLWordData) => void) {
   server.get_word(word, (word_data: LLWordData) => {
     if(word_data !== null) {
@@ -137,9 +145,12 @@ function renderSearchPanel() {
   server.get_words((words: string[]) => {
     if(words !== null) {
       ReactDOM.render(<LLSearch 
+                          default_url={server_url}
+                          default_port={server_port}
                           words={words} 
                           on_word_select={wordSelectHandler} 
                           on_flashcard={flashcard_handler} 
+                          on_server_update={server_update_handler}
                           on_new_word={newWordHandler}/>, 
                       document.getElementById('search-panel'));
     } else {

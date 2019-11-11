@@ -3,9 +3,12 @@ import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
 
 export interface LLSearchProps {
+  default_url: string;
+  default_port: string;
   on_word_select: (word: string) => void;
   on_new_word: (word: string) => void;
   on_flashcard: () => void;
+  on_server_update: (url: string, port: string) => void;
   words: string[];
 }
  
@@ -13,15 +16,25 @@ export interface LLSearchState {}
  
 class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   state = {
-    form_hidden: true,
-    search_text: ""
+    new_word_form_hidden: true,
+    server_form_hidden: true,
+    search_text: "",
+    server_url_text: this.props.default_url,
+    server_port_text: this.props.default_port
   }
 
-  set_form_hidden(e: any, is_hidden : boolean) {
+  set_new_word_form_hidden(e: any, is_hidden : boolean) {
     if(e !== null) {
       e.preventDefault();
     }
-    this.setState({'form_hidden': is_hidden});
+    this.setState({'new_word_form_hidden': is_hidden});
+  }
+
+  set_server_form_hidden(e: any, is_hidden : boolean) {
+    if(e !== null) {
+      e.preventDefault();
+    }
+    this.setState({'server_form_hidden': is_hidden});
   }
   
   flashcard_mode(e: any) {
@@ -37,12 +50,22 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   on_new_word() {
     let input = this.refs.new_word as LLLabelInput;
     this.props.on_new_word(input.value());
-    this.set_form_hidden(null, true);
+    this.set_new_word_form_hidden(null, true);
   }
 
   on_search_change() {
     let input = this.refs.search as HTMLInputElement;
     this.setState({search_text: input.value});
+  }
+
+  on_server_update() {
+    let url_input = this.refs.url as LLLabelInput;
+    let port_input = this.refs.port as LLLabelInput;
+    this.setState({
+      server_url_text: url_input.value(),
+      server_port_text: port_input.value()
+    });
+    this.props.on_server_update(url_input.value(), port_input.value());
   }
 
   search_includes(word: string) {
@@ -70,15 +93,31 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
   render() { 
     let new_word_form = undefined;
-    if(!this.state.form_hidden) {
+    if(!this.state.new_word_form_hidden) {
       new_word_form = (
         <div className="small col-md-12 text-white">
           <LLOkCancelForm 
               ok_name="Add" 
               cancel_name="Close" 
               on_ok={() => this.on_new_word()} 
-              on_cancel={() => this.set_form_hidden(null, true)}>
+              on_cancel={() => this.set_new_word_form_hidden(null, true)}>
             <LLLabelInput ref="new_word" label="Word"/>
+          </LLOkCancelForm>
+        </div>
+      );
+    }
+
+    let server_form = undefined;
+    if(!this.state.server_form_hidden) {
+      server_form = (
+        <div className="small col-md-12 text-white">
+          <LLOkCancelForm 
+              ok_name="Update" 
+              cancel_name="Close" 
+              on_ok={() => this.on_server_update()} 
+              on_cancel={() => this.set_server_form_hidden(null, true)}>
+            <LLLabelInput ref="url" label="URL" text={this.state.server_url_text}/>
+            <LLLabelInput ref="port" label="Port" text={this.state.server_port_text}/>
           </LLOkCancelForm>
         </div>
       );
@@ -107,21 +146,28 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.set_form_hidden(e, false)}}>
-            <i className="fas fa-plus-square"></i> New Word
+          <a className="nav-link" href="#/" onClick={(e) => {this.set_server_form_hidden(e, false)}}>
+            <i className="fas fa-server"></i> Server
           </a>
         </li>
+        {server_form}
+
         <hr className="sidebar-divider my-0" />
-
-        {new_word_form}
-
         <li className="nav-item">
           <a className="nav-link" href="#/" onClick={(e) => {this.flashcard_mode(e)}}>
             <i className="fas fa-comment-alt"></i> Flashcard
           </a>
         </li>
-        <hr className="sidebar-divider my-0" />
 
+        <hr className="sidebar-divider my-0" />
+        <li className="nav-item">
+          <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
+            <i className="fas fa-plus-square"></i> New Word
+          </a>
+        </li>
+        {new_word_form}
+
+        <hr className="sidebar-divider my-0" />
         <div style={{height: "350px"}}>
           <div className="overflow-auto h-100 d-inline-block">
             {this.props.words.map((word, id) => {

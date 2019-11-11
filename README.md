@@ -30,10 +30,17 @@ npm start
 ```
 
 ### Data Files
-Data files are stored under "server/data/"
+By default, data files are stored under "server/data/"
 
 ## Use
 Go to [http://localhost:3000/](http://localhost:3000/)
 
 ## Import/Export Data Files
 Simply copy the JSON files in "server/data/" into another project or for backup
+
+## Custom properties
+To change server properties, create `server.properties` file inside the `server/` directory:
+```
+port=3001           # default is 3001
+data_dir=/tmp/data  # default is './data'
+```

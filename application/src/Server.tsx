@@ -1,7 +1,11 @@
 import LLWordData from './models/WordData';
 
 class LLServer {
-  constructor(private url: string, private port: number) {}
+  constructor(private url: string, private port: string) {}
+  set_url(url: string, port: string) {
+    this.url = url;
+    this.port = port;
+  }
   get_url(...args: string[]) {
     let url = this.url + ":" + this.port;
     args.forEach((val) => {
