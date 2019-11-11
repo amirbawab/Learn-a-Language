@@ -22,6 +22,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
   add_native() {
     let input = this.refs.native_form as LLLabelInput;
     this.props.on_add(input.value());
+    this.set_form_hidden(true);
   }
   delete_native(e: any, id: number) {
     e.preventDefault();

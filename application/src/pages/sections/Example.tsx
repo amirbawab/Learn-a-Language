@@ -33,6 +33,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
   add_example() {
     let input = this.refs.sentence as LLLabelInput
     this.props.on_add(input.value());
+    this.set_sentence_form_hidden(true);
     return false;
   }
   delete_example(e: any, id: number) {
@@ -44,6 +45,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     let sound_input = this.refs["sound_"+id] as LLLabelInput;
     this.props.data[id].add_sound(language_input.value(), sound_input.value());
     this.props.onExampleUpdate();
+    this.set_pronunciation_form_hidden(null, id, true);
   }
   delete_example_sound(e: any, example_id: number, sound_id: number) {
     e.preventDefault();

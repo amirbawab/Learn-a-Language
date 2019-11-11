@@ -37,6 +37,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   on_new_word() {
     let input = this.refs.new_word as LLLabelInput;
     this.props.on_new_word(input.value());
+    this.set_form_hidden(null, true);
   }
 
   on_search_change() {

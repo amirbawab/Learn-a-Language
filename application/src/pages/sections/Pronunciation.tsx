@@ -24,6 +24,7 @@ class LLPronunciation extends React.Component<LLPronunciationProps, LLPronunciat
     let language_input = this.refs.language as LLLabelInput;
     let sound_input = this.refs.sound as LLLabelInput;
     this.props.on_add(language_input.value(), sound_input.value());
+    this.set_form_hidden(true);
   }
   delete_pronunciation(e: any, id: number) {
     e.preventDefault();
