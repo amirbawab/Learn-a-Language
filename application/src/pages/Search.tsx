@@ -122,17 +122,21 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         </li>
         <hr className="sidebar-divider my-0" />
 
-        {this.props.words.map((word, id) => {
-          return (
-            <React.Fragment key={id}>
-              {this.search_includes(word) ? (
-                <li className="nav-item">
-                  <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word}</a>
-                </li>
-              ) : undefined}
-            </React.Fragment>
-          );
-        })}
+        <div style={{height: "350px"}}>
+          <div className="overflow-auto h-100 d-inline-block">
+            {this.props.words.map((word, id) => {
+              return (
+                <React.Fragment key={id}>
+                  {this.search_includes(word) ? (
+                    <li className="nav-item">
+                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word}</a>
+                    </li>
+                  ) : undefined}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   }
