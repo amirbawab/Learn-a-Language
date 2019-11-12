@@ -2,6 +2,10 @@ import * as React from 'react';
 
 // Components
 import LLTitle from '../components/Title';
+import {LLBorderCard, LLBasicCard} from '../components/Card';
+import {LLSplitButton} from '../components/Button';
+import {LLOkCancelForm} from '../components/Form';
+import {LLLabelInput} from '../components/Input';
 
 // Sections
 import LLPronunciation from './sections/Pronunciation';
@@ -16,18 +20,33 @@ export interface LLWordProps {
   word: LLWordData;
   onDelete: (word: LLWordData) => void;
   onEdit: (word: LLWordData) => void;
+  on_copy_word: (word: LLWordData) => void;
 }
  
 export interface LLWordState {}
  
 class LLWord extends React.Component<LLWordProps, LLWordState> {
   state = {
-    word: this.props.word
+    word: this.props.word,
+    copy_form_hidden: true
+  }
+
+  set_copy_form_hidden(is_hidden: boolean) {
+    this.setState({copy_form_hidden: is_hidden});
+    return false;
   }
 
   update_word() {
     this.setState(this.state);
     this.props.onEdit(this.state.word);
+  }
+
+  copy_word() {
+    let input = this.refs.copy_word as LLLabelInput;
+    let copy = this.state.word.clone();
+    copy.set_word(input.value());
+    this.props.on_copy_word(copy);
+    this.set_copy_form_hidden(true);
   }
 
   add_native_handler(form: string) {
@@ -66,9 +85,37 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
   }
 
   render() {
+    let copy_form = undefined;
+    if(!this.state.copy_form_hidden) {
+      copy_form = (
+        <div className="row">
+          <div className="col-lg-12">
+            <LLBasicCard>
+              <LLOkCancelForm 
+                  ok_name="Copy" 
+                  cancel_name="Close" 
+                  on_ok={() => this.copy_word()} 
+                  on_cancel={() => this.set_copy_form_hidden(true)}>
+                <LLLabelInput ref="copy_word" label="Copy Name"/>
+              </LLOkCancelForm>
+            </LLBasicCard>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="m-2">
-        <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
+        <LLTitle>
+          <i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b>
+          <LLSplitButton 
+              theme="info" 
+              extra_class="btn-sm float-right"
+              icon="far fa-copy" 
+              on_click={() => this.set_copy_form_hidden(false)}>
+            Copy
+          </LLSplitButton>
+        </LLTitle>
+        {copy_form}
         <LLNative
               read_only={false}
               on_add={(form) => this.add_native_handler(form)} 

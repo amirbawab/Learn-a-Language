@@ -27,6 +27,9 @@ class LLWordData {
   public get_word() {
     return this.word;
   }
+  public set_word(word: string) {
+    this.word = word;
+  }
   public add_native(native_form: string) {
     this.natives.push(native_form);
   }
@@ -71,6 +74,9 @@ class LLWordData {
       json.pronunciation.push(val.to_json());
     });
     return json;
+  }
+  public clone() {
+    return LLWordData.from_json(this.to_json());
   }
 }
 

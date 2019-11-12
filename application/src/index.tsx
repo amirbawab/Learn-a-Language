@@ -107,6 +107,10 @@ function flashcard_show_word_handler(word: string, callback: (word: LLWordData) 
   });
 }
 
+function copy_word_handler(word: LLWordData) {
+  saveHandler(word);
+}
+
 /**
  * Render functions
  */
@@ -132,6 +136,7 @@ function renderWordPanel(word: string) {
       ReactDOM.render(<LLWord 
                           key={word_data.get_word()}
                           word={word_data} 
+                          on_copy_word={copy_word_handler}
                           onEdit={wordUpdatedHandler}
                           onDelete={deleteHandler}/>, 
                       document.getElementById('page-content'));
