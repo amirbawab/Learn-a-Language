@@ -149,6 +149,7 @@ function renderWordPanel(word: string) {
 function renderSearchPanel() {
   server.get_words((words: string[]) => {
     if(words !== null) {
+      words.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
       ReactDOM.render(<LLSearch 
                           default_url={server_url}
                           default_port={server_port}
