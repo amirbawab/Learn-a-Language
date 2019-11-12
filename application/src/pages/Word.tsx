@@ -2,10 +2,11 @@ import * as React from 'react';
 
 // Components
 import LLTitle from '../components/Title';
-import {LLBorderCard, LLBasicCard} from '../components/Card';
+import {LLBasicCard} from '../components/Card';
 import {LLSplitButton} from '../components/Button';
 import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
+//import * as md5 from '@types/md5';
 
 // Sections
 import LLPronunciation from './sections/Pronunciation';
@@ -15,6 +16,7 @@ import LLNative from './sections/Native';
 // Models
 import LLWordData from '../models/WordData';
 import LLExampleData from '../models/ExampleData';
+const md5 = require("md5");
 
 export interface LLWordProps {
   word: LLWordData;
@@ -96,7 +98,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
                   cancel_name="Close" 
                   on_ok={() => this.copy_word()} 
                   on_cancel={() => this.set_copy_form_hidden(true)}>
-                <LLLabelInput ref="copy_word" label="Copy Name"/>
+                <LLLabelInput ref="copy_word" label="Copy Word"/>
               </LLOkCancelForm>
             </LLBasicCard>
           </div>
@@ -106,14 +108,19 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     return (
       <div className="m-2">
         <LLTitle>
-          <i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b>
-          <LLSplitButton 
-              theme="info" 
-              extra_class="btn-sm float-right"
-              icon="far fa-copy" 
-              on_click={() => this.set_copy_form_hidden(false)}>
-            Copy
-          </LLSplitButton>
+          <div>
+            <i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b>
+            <LLSplitButton 
+                theme="secondary" 
+                extra_class="btn-sm float-right"
+                icon="far fa-copy" 
+                on_click={() => this.set_copy_form_hidden(false)}>
+              Copy Word
+            </LLSplitButton>
+          </div>
+          <div>
+            <small style={{fontSize:15}}className="text-secondary"><em>key: {md5(this.state.word.get_word())}</em></small>
+          </div>
         </LLTitle>
         {copy_form}
         <LLNative
