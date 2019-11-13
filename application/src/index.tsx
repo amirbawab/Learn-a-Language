@@ -10,7 +10,6 @@ import LLNotification from './pages/Notification';
 import {LLServer, LLLocalServer, LLRemoteServer} from './Server';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
-const assert = require('assert');
 
 var server_url = "http://localhost";
 var server_port = "3001";
