@@ -24,6 +24,7 @@ Build front-end
 ```
 cd $REPO/application
 npm install
+npm run build
 ```
 Build back-end
 ```
@@ -32,10 +33,8 @@ npm install
 ```
 ### Run
 Run front-end
-```
-cd $REPO/application
-npm start
-```
+Open `$REPO/application/build/index.html` page in your browser.  
+
 Run back-end
 ```
 cd $REPO/server
