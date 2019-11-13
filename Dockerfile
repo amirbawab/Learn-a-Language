@@ -1,7 +1,7 @@
 FROM node:12.13.0
 WORKDIR /usr/src/app
 
-COPY ./run_app.sh ./run_app.sh
+COPY ./docker.sh ./docker.sh
 COPY ./application ./application
 COPY ./server ./server
 
@@ -11,4 +11,4 @@ RUN cd ./server && npm install
 EXPOSE 3000
 EXPOSE 3001
 
-CMD ./run_app.sh
+CMD ./docker.sh
