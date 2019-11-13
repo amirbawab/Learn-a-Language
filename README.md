@@ -7,7 +7,11 @@
 ## Table of Contents
 - [Manually](#manually)
   - [Build](#build)
+    - [Front-end](#front-end)
+    - [Back-end](#back-end)
   - [Run](#run)
+    - [Front-end](#front-end-1)
+    - [Back-end](#back-end-1)
   - [Data Files](#data-files)
 - [Docker](#docker)
   - [Build](#build-1)
@@ -20,22 +24,22 @@
 
 ## Manually
 ### Build
-Build front-end
+#### Front-end
 ```
 cd $REPO/application
 npm install
 npm run build
 ```
-Build back-end
+#### Back-end
 ```
 cd $REPO/server
 npm install
 ```
 ### Run
-Run front-end
+#### Front-end
 Open `$REPO/application/build/index.html` page in your browser.  
 
-Run back-end
+#### Back-end
 ```
 cd $REPO/server
 npm start
