@@ -2,11 +2,16 @@
 
 ## Table of Contents
 - [Docker](#docker)
-  - [Build]()
-  - [Run]()
+  - [Build](#build)
+  - [Run](#run)
+  - [Data Files](#data-files)
 - [Manually](#manually)
-  - [Build]()
-  - [Run]()
+  - [Build](#build-1)
+  - [Run](#run-1)
+  - [Data Files](#data-files-1)
+- [Usage](#usage)
+- [Import/Export Data Files](#import-export-data-files)
+- [Custom Properties](#custom-properties)
 
 ## Manually
 ### Build
@@ -31,6 +36,8 @@ Run back-end
 cd $REPO/server
 npm start
 ```
+### Data Files
+By default, data files are stored under "$REPO/server/data/". For more info check [Custom Properties](#custom-properties).
 
 ## Docker
 ### Build
@@ -41,23 +48,17 @@ sudo docker build -t learn-a-language:latest .
 ```
 sudo docker run --name example -p 3000:3000 -p 3001:3001 -v $PWD/server/data:/usr/src/app/server/data -it learn-a-language:latest
 ```
-
-## Data Files
-To access the data files, make sure to share the volume "server/data/" between the host and the container as
-shown in the [Run](#run) section
-
-
-
 ### Data Files
-By default, data files are stored under "server/data/"
+To access the data files, make sure to share the volume "server/data/" between the host and the container as
+shown in the [Run](#run-1) section.
 
-## Use
+## Usage
 Go to [http://localhost:3000/](http://localhost:3000/)
 
 ## Import/Export Data Files
-Simply copy the JSON files in "server/data/" into another project or for backup
+Simply copy the JSON data files into another project or for backup.
 
-## Custom properties
+## Custom Properties
 To change server properties, create `server.properties` file inside the `server/` directory:
 ```
 port=3001           # default is 3001
