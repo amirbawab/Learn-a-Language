@@ -16,7 +16,7 @@ export interface LLFlashcardProps {
 export interface LLFlashcardState {}
  
 class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
-  index: number = 0;
+  index: number = -1;
   state: {
     word: LLWordData | null;
     hide_native: boolean;
@@ -40,22 +40,24 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
 
   next() {
     if(this.props.words.length > 0) {
-      this.props.on_show_word(this.props.words[this.index++], (word: LLWordData) => {
+      this.index = (this.index + 1) % this.props.words.length;
+      this.props.on_show_word(this.props.words[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
-      this.index %= this.props.words.length;
     }
     return false;
   }
 
   previous() {
     if(this.props.words.length > 0) {
-      this.props.on_show_word(this.props.words[this.index--], (word: LLWordData) => {
+      if(this.index === 0) {
+        this.index = this.props.words.length - 1;
+      } else {
+        this.index--;
+      }
+      this.props.on_show_word(this.props.words[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
-      if(this.index === -1) {
-        this.index = this.props.words.length - 1;
-      }
     }
     return false;
   }
