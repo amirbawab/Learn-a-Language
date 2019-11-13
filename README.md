@@ -1,4 +1,36 @@
-# Learn A Language
+# Learn a Language
+
+## Table of Contents
+- [Docker](#docker)
+  - [Build]()
+  - [Run]()
+- [Manually](#manually)
+  - [Build]()
+  - [Run]()
+
+## Manually
+### Build
+Build front-end
+```
+cd $REPO/application
+npm install
+```
+Build back-end
+```
+cd $REPO/server
+npm install
+```
+### Run
+Run front-end
+```
+cd $REPO/application
+npm start
+```
+Run back-end
+```
+cd $REPO/server
+npm start
+```
 
 ## Docker
 ### Build
@@ -10,24 +42,11 @@ sudo docker build -t learn-a-language:latest .
 sudo docker run --name example -p 3000:3000 -p 3001:3001 -v $PWD/server/data:/usr/src/app/server/data -it learn-a-language:latest
 ```
 
-### Data Files
+## Data Files
 To access the data files, make sure to share the volume "server/data/" between the host and the container as
 shown in the [Run](#run) section
 
-## Manually
-### Build and Start Fontend
-```
-cd application
-npm install
-npm start
-```
 
-### Build and Start Backend
-```
-cd server
-npm install
-npm start
-```
 
 ### Data Files
 By default, data files are stored under "server/data/"
