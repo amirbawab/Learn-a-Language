@@ -1,17 +1,18 @@
 # Learn a Language
 
 ## Table of Contents
-- [Docker](#docker)
+- [Manually](#manually)
   - [Build](#build)
   - [Run](#run)
   - [Data Files](#data-files)
-- [Manually](#manually)
+- [Docker](#docker)
   - [Build](#build-1)
   - [Run](#run-1)
   - [Data Files](#data-files-1)
 - [Usage](#usage)
-- [Import/Export Data Files](#import-export-data-files)
+- [Import/Export Data Files](#importexport-data-files)
 - [Custom Properties](#custom-properties)
+  - [Server](#server)
 
 ## Manually
 ### Build
@@ -46,7 +47,7 @@ sudo docker build -t learn-a-language:latest .
 ```
 ### Run
 ```
-sudo docker run --name example -p 3000:3000 -p 3001:3001 -v $PWD/server/data:/usr/src/app/server/data -it learn-a-language:latest
+sudo docker run --name example -p 3000:3000 -p 3001:3001 -v $REPO/server/data:/usr/src/app/server/data -it learn-a-language:latest
 ```
 ### Data Files
 To access the data files, make sure to share the volume "server/data/" between the host and the container as
@@ -59,7 +60,8 @@ Go to [http://localhost:3000/](http://localhost:3000/)
 Simply copy the JSON data files into another project or for backup.
 
 ## Custom Properties
-To change server properties, create `server.properties` file inside the `server/` directory:
+### Server
+To change server properties, create `server.properties` file inside the `$REPO/server/` directory:
 ```
 port=3001           # default is 3001
 data_dir=/tmp/data  # default is './data'
