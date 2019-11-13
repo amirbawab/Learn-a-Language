@@ -111,6 +111,29 @@ function copy_word_handler(word: LLWordData) {
   saveHandler(word);
 }
 
+function resolve_keys_handler(keys: string[]) {
+  let result: Map<string, string> = new Map();
+  keys.forEach((key: string) => {
+    let word = server.get_word_string_from_key(key);
+    if(word !== null) {
+      result.set(key, String(word));
+    }
+  });
+  return result;
+}
+
+function flashcard_word_select_handler(word: string) {
+  renderNotification({
+    theme: "warning", 
+    hidden: false, 
+    text: "Click on 'Visit Word' to exist flashcard exercise and show word '" + word + "' in regular mode", 
+    button: "Visit Word", 
+    on_button_click: () => {
+      renderWordPanel(word);
+    }
+  });
+}
+
 /**
  * Render functions
  */
@@ -123,7 +146,11 @@ function render_flashcard_panel() {
   server.get_words((words: string[]) => {
     if(words !== null) {
       LLUtils.shuffle(words);
-      ReactDOM.render(<LLFlashcard words={words} on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
+      ReactDOM.render(<LLFlashcard 
+        words={words} 
+        on_word_select={flashcard_word_select_handler}
+        on_resolve_keys={resolve_keys_handler}
+        on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
     } else {
       errorNotification("Failed to load list of words from server");
     }
@@ -136,7 +163,9 @@ function renderWordPanel(word: string) {
       ReactDOM.render(<LLWord 
                           key={word_data.get_word()}
                           word={word_data} 
+                          on_resolve_keys={resolve_keys_handler}
                           on_copy_word={copy_word_handler}
+                          on_word_select={wordSelectHandler}
                           onEdit={wordUpdatedHandler}
                           onDelete={deleteHandler}/>, 
                       document.getElementById('page-content'));

@@ -6,7 +6,6 @@ import {LLBasicCard} from '../components/Card';
 import {LLSplitButton} from '../components/Button';
 import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
-//import * as md5 from '@types/md5';
 
 // Sections
 import LLPronunciation from './sections/Pronunciation';
@@ -16,13 +15,14 @@ import LLNative from './sections/Native';
 // Models
 import LLWordData from '../models/WordData';
 import LLExampleData from '../models/ExampleData';
-const md5 = require("md5");
 
 export interface LLWordProps {
   word: LLWordData;
   onDelete: (word: LLWordData) => void;
   onEdit: (word: LLWordData) => void;
   on_copy_word: (word: LLWordData) => void;
+  on_resolve_keys: (keys: string[]) => Map<string, string>;
+  on_word_select: (word: string) => void;
 }
  
 export interface LLWordState {}
@@ -119,7 +119,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
             </LLSplitButton>
           </div>
           <div>
-            <small style={{fontSize:15}}className="text-secondary"><em>key: {md5(this.state.word.get_word())}</em></small>
+            <small style={{fontSize:15}}className="text-secondary"><em>key: {this.state.word.get_md5()}</em></small>
           </div>
         </LLTitle>
         {copy_form}
@@ -127,6 +127,8 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               read_only={false}
               on_add={(form) => this.add_native_handler(form)} 
               on_delete={(id) => this.delete_native_handler(id)} 
+              on_resolve_keys={this.props.on_resolve_keys}
+              on_word_select={this.props.on_word_select}
               data={this.state.word.get_natives()}/>
         <LLPronunciation  
               read_only={false}

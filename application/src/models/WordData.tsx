@@ -1,5 +1,6 @@
 import LLExampleData from './ExampleData';
 import LLSoundData from './SoundData';
+const md5 = require("md5");
 
 class LLWordData {
   private pronunciations: LLSoundData[] = [];
@@ -29,6 +30,9 @@ class LLWordData {
   }
   public set_word(word: string) {
     this.word = word;
+  }
+  public get_md5() {
+    return md5(this.get_word());
   }
   public add_native(native_form: string) {
     this.natives.push(native_form);

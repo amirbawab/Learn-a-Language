@@ -20,7 +20,9 @@ class LLNotification extends React.Component<LLNotificationProps, LLNotification
     let button = <React.Fragment/>;
     if(this.props.button.length > 0) {
       button = (
-        <button className="btn btn-primary btn-sm float-right ml-2" onClick={this.props.on_button_click}>Save</button>
+        <button className="btn btn-primary btn-sm float-right ml-2" onClick={this.props.on_button_click}>
+          {this.props.button}
+        </button>
       );
     }
     return (
