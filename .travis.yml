@@ -6,6 +6,7 @@ node_js:
   - 10
   - 9
 install:
-  - cd application/ && npm install && cd ../server && npm install
+  - cd $TRAVIS_BUILD_DIR/application/ && npm install
+  - cd $TRAVIS_BUILD_DIR/server/ && npm install
 script:
-  - cd application/ && npm run build
+  - cd $TRAVIS_BUILD_DIR/application/ && npm run build
