@@ -7,13 +7,14 @@ import LLWord from './pages/Word';
 import LLSearch from './pages/Search';
 import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
-import LLServer from './Server';
+import {LLServer, LLLocalServer, LLRemoteServer} from './Server';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
+const assert = require('assert');
 
 var server_url = "http://localhost";
 var server_port = "3001";
-var server = new LLServer(server_url, server_port);
+var server: LLServer;
 
 /**
  * Notification functions
@@ -41,6 +42,10 @@ function errorNotification(text: string) {
 
 function successNotification(text: string) {
   renderNotification({theme: "success", hidden: false, text: text});
+}
+
+function warningNotification(text: string) {
+  renderNotification({theme: "warning", hidden: false, text: text});
 }
 
 /**
@@ -91,14 +96,30 @@ function flashcard_handler() {
   render_flashcard_panel();
 }
 
-function server_update_handler(url: string, port: string) {
-  server.set_url(url, port);
+function demo_handler() {
+  demo_mode("Activated Demo mode. All data will be erased upon refreshing the page.");
+}
+
+function demo_mode(msg: string) {
+  server = new LLLocalServer();
+  warningNotification(msg);
   renderSearchPanel();
   renderInfoPanel();
 }
 
+function server_mode(s: LLRemoteServer) {
+  server = s;
+  successNotification("Successfully connected to " + server.to_string());
+  renderSearchPanel();
+  renderInfoPanel();
+}
+
+function server_update_handler(url: string, port: string) {
+  connect_to_server(new LLRemoteServer(url, port))
+}
+
 function flashcard_show_word_handler(word: string, callback: (word: LLWordData) => void) {
-  server.get_word(word, (word_data: LLWordData) => {
+  server.get_word(word, (word_data: LLWordData | null) => {
     if(word_data !== null) {
       callback(word_data);
     } else {
@@ -143,7 +164,7 @@ function renderInfoPanel() {
 }
 
 function render_flashcard_panel() {
-  server.get_words((words: string[]) => {
+  server.get_words((words: string[] | null) => {
     if(words !== null) {
       LLUtils.shuffle(words);
       ReactDOM.render(<LLFlashcard 
@@ -158,7 +179,7 @@ function render_flashcard_panel() {
 }
 
 function renderWordPanel(word: string) {
-  server.get_word(word, (word_data: LLWordData) => {
+  server.get_word(word, (word_data: LLWordData | null) => {
     if(word_data !== null) {
       ReactDOM.render(<LLWord 
                           key={word_data.get_word()}
@@ -176,20 +197,20 @@ function renderWordPanel(word: string) {
 }
 
 function renderSearchPanel() {
-  server.get_words((words: string[]) => {
-    if(words !== null) {
-      ReactDOM.render(<LLSearch 
-                          default_url={server_url}
-                          default_port={server_port}
-                          words={words} 
-                          on_word_select={wordSelectHandler} 
-                          on_flashcard={flashcard_handler} 
-                          on_server_update={server_update_handler}
-                          on_new_word={newWordHandler}/>, 
-                      document.getElementById('search-panel'));
-    } else {
+  server.get_words((words: string[] | null) => {
+    if(words === null) {
       errorNotification("Failed to load list of words from server");
     }
+    ReactDOM.render(<LLSearch 
+                        default_url={server_url}
+                        default_port={server_port}
+                        words={words === null ? [] : words} 
+                        on_word_select={wordSelectHandler} 
+                        on_flashcard={flashcard_handler} 
+                        on_demo={demo_handler}
+                        on_server_update={server_update_handler}
+                        on_new_word={newWordHandler}/>, 
+                    document.getElementById('search-panel'));
   });
 }
 
@@ -220,8 +241,19 @@ function renderNotification(config: any) {
 }
 
 // Render default panels
+
+function connect_to_server(s: LLRemoteServer) {
+  s.is_ok((success: boolean) => {
+    if(success) {
+      server_mode(s);
+    } else {
+      demo_mode("Failed to connect to the server at " + s.to_string() + 
+        ". Switching to Demo mode. All data will be erased upon refreshing the page.");
+    }
+  });
+}
+
 renderLogo();
-renderSearchPanel();
-renderInfoPanel();
+connect_to_server(new LLRemoteServer(server_url, server_port));
 
 serviceWorker.unregister();

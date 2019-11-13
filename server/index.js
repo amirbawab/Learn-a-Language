@@ -39,6 +39,11 @@ app.get('/', function(req, res) {
   res.send('Server running ...');
 })
 
+// Ok
+app.get('/ok', function(req, res) {
+  res.json({success: true});
+})
+
 // Get all words
 app.get('/words', function(req, res) {
   let json = {words: []};
