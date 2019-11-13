@@ -45,11 +45,13 @@ app.get('/words', function(req, res) {
   if(fs.existsSync(data_dir)) {
     let files = fs.readdirSync(data_dir);
     files.forEach(file => {
-      let file_data = JSON.parse(fs.readFileSync(data_path(file)));
-      json.words.push(file_data.word);
+      if(file.endsWith(".json")) {
+        let file_data = JSON.parse(fs.readFileSync(data_path(file)));
+        json.words.push(file_data.word);
+      }
     });
   }
-  json.words.sort();
+  json.words.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
   res.json(json);
 })
 
