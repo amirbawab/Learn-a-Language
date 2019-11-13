@@ -7,3 +7,4 @@ node_js:
   - 9
 install:
   - cd application/ && npm install && cd ../server && npm install
+script:
