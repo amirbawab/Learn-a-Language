@@ -1,5 +1,9 @@
 # Learn a Language [![Build Status](https://travis-ci.org/amirbawab/Learn-a-Language.svg?branch=master)](https://travis-ci.org/amirbawab/Learn-a-Language)
 
+## Live Demo
+[Demo Link](https://amirbawab.github.io/Learn-a-Language/application/)  
+**Note:** All data are cleared upon refresh
+
 ## Table of Contents
 - [Manually](#manually)
   - [Build](#build)
