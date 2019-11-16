@@ -127,7 +127,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
                 read_only={true}
                 on_add={() => {}}
                 on_delete={() => {}}
-                onExampleUpdate={() => {}}
+                on_example_update={() => {}}
                 data={this.state.word.get_examples()}/>
         );
       }

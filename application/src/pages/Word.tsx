@@ -19,8 +19,8 @@ import LLExampleData from '../models/ExampleData';
 export interface LLWordProps {
   read_only: boolean;
   word: LLWordData;
-  onDelete: (word: LLWordData) => void;
-  onEdit: (word: LLWordData) => void;
+  on_delete: (word: LLWordData) => void;
+  on_edit: (word: LLWordData) => void;
   on_copy_word: (word: LLWordData) => void;
   on_resolve_keys: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
@@ -41,7 +41,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
 
   update_word() {
     this.setState(this.state);
-    this.props.onEdit(this.state.word);
+    this.props.on_edit(this.state.word);
   }
 
   copy_word() {
@@ -140,11 +140,11 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               read_only={false}
               on_add={(sentence) => this.add_example_handler(sentence)}
               on_delete={(id) => this.delete_example_handler(id)}
-              onExampleUpdate={() => this.update_example_handler()}
+              on_example_update={() => this.update_example_handler()}
               data={this.state.word.get_examples()}/>
         <div className="alert alert-warning" role="alert">
           Click "Delete" to remove the word
-          <button className="btn btn-danger btn-sm float-right ml-2" onClick={() => {this.props.onDelete(this.state.word)}}>Delete</button>
+          <button className="btn btn-danger btn-sm float-right ml-2" onClick={() => {this.props.on_delete(this.state.word)}}>Delete</button>
         </div>
       </div>
     );

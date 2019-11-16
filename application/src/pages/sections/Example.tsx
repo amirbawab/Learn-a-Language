@@ -10,7 +10,7 @@ export interface LLExampleProps {
   data: LLExampleData[];
   on_add: (sentence: string) => void;
   on_delete: (id: number) => void;
-  onExampleUpdate: () => void;
+  on_example_update: () => void;
 }
 export interface LLExampleState {}
 class LLExample extends React.Component<LLExampleProps, LLExampleState> {
@@ -44,13 +44,13 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
     let language_input = this.refs["language_"+id] as LLLabelInput;
     let sound_input = this.refs["sound_"+id] as LLLabelInput;
     this.props.data[id].add_sound(language_input.value(), sound_input.value());
-    this.props.onExampleUpdate();
+    this.props.on_example_update();
     this.set_pronunciation_form_hidden(null, id, true);
   }
   delete_example_sound(e: any, example_id: number, sound_id: number) {
     e.preventDefault();
     this.props.data[example_id].delete_sound(sound_id);
-    this.props.onExampleUpdate();
+    this.props.on_example_update();
   }
   render() {
     let sentence_form = undefined;

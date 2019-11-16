@@ -19,76 +19,76 @@ var server: LLServer;
  * Notification functions
  */
 
-function hideNotification() {
-  renderNotification({hidden: true});
+function hide_notification() {
+  render_notification({hidden: true});
 }
 
-function saveNotification(word: LLWordData, text: string) {
-  renderNotification({
+function save_notification(word: LLWordData, text: string) {
+  render_notification({
     theme: "warning", 
     hidden: false, 
     text: text, 
     button: "Save", 
     on_button_click: () => {
-      saveHandler(word)
+      save_handler(word)
     }
   });
 }
 
-function errorNotification(text: string) {
-  renderNotification({theme: "danger", hidden: false, text: text});
+function error_notification(text: string) {
+  render_notification({theme: "danger", hidden: false, text: text});
 }
 
-function successNotification(text: string) {
-  renderNotification({theme: "success", hidden: false, text: text});
+function success_notification(text: string) {
+  render_notification({theme: "success", hidden: false, text: text});
 }
 
-function warningNotification(text: string) {
-  renderNotification({theme: "warning", hidden: false, text: text});
+function warning_notification(text: string) {
+  render_notification({theme: "warning", hidden: false, text: text});
 }
 
 /**
  * Event handlers
  */
 
-function notificationCloseHandler() {
-  hideNotification();
+function notification_close_handler() {
+  hide_notification();
 }
 
-function saveHandler(word: LLWordData) {
+function save_handler(word: LLWordData) {
   server.set_word(word, (success: boolean) => {
     if(success) {
-      renderSearchPanel();
-      renderWordPanel(word.get_word());
-      successNotification("Word '" + word.get_word() + "' was saved successfully");
+      render_search_panel();
+      render_word_panel(word.get_word());
+      success_notification("Word '" + word.get_word() + "' was saved successfully");
     } else {
-      errorNotification("Failed to save '" + word.get_word()+"'");
+      error_notification("Failed to save '" + word.get_word()+"'");
     }
   });
 }
 
-function deleteHandler(word: LLWordData) {
+function delete_handler(word: LLWordData) {
   server.remove_word(word.get_word(), (success: boolean) => {
     if(success) {
-      renderSearchPanel();
-      renderInfoPanel();
-      successNotification("Word '" + word.get_word() + "' was deleted successfully");
+      render_search_panel();
+      render_info_panel();
+      success_notification("Word '" + word.get_word() + "' was deleted successfully");
     } else {
-      errorNotification("Failed to delete '" + word.get_word()+"'");
+      error_notification("Failed to delete '" + word.get_word()+"'");
     }
   });
 }
 
-function newWordHandler(word: string) {
-  saveHandler(new LLWordData(word));
+function new_word_handler(word: string) {
+  save_handler(new LLWordData(word));
 }
 
-function wordSelectHandler(word: string) {
-  renderWordPanel(word);
+function word_select_handler(word: string) {
+  render_word_panel(word);
 }
 
-function wordUpdatedHandler(word: LLWordData) {
-  saveNotification(word, "Click 'Save' after done editing, or Refresh to abort the changes");
+function word_updated_handler(word: LLWordData) {
+  save_notification(word, "Click 'Save' after done editing, or Refresh to abort the changes");
 }
 
 function flashcard_handler() {
@@ -101,16 +101,16 @@ function demo_handler() {
 
 function demo_mode(msg: string) {
   server = new LLLocalServer();
-  warningNotification(msg);
-  renderSearchPanel();
-  renderInfoPanel();
+  warning_notification(msg);
+  render_search_panel();
+  render_info_panel();
 }
 
 function server_mode(s: LLRemoteServer) {
   server = s;
-  successNotification("Successfully connected to " + server.to_string());
-  renderSearchPanel();
-  renderInfoPanel();
+  success_notification("Successfully connected to " + server.to_string());
+  render_search_panel();
+  render_info_panel();
 }
 
 function server_update_handler(url: string, port: string) {
@@ -122,13 +122,13 @@ function flashcard_show_word_handler(word: string, callback: (word: LLWordData) 
     if(word_data !== null) {
       callback(word_data);
     } else {
-      errorNotification("Failed to load flashcard word '" + word + "'");
+      error_notification("Failed to load flashcard word '" + word + "'");
     }
   });
 }
 
 function copy_word_handler(word: LLWordData) {
-  saveHandler(word);
+  save_handler(word);
 }
 
 function resolve_keys_handler(keys: string[]) {
@@ -143,13 +143,13 @@ function resolve_keys_handler(keys: string[]) {
 }
 
 function flashcard_word_select_handler(word: string) {
-  renderNotification({
+  render_notification({
     theme: "warning", 
     hidden: false, 
     text: "Click on 'Visit Word' to exist flashcard exercise and show word '" + word + "' in regular mode", 
     button: "Visit Word", 
     on_button_click: () => {
-      renderWordPanel(word);
+      render_word_panel(word);
     }
   });
 }
@@ -158,7 +158,7 @@ function flashcard_word_select_handler(word: string) {
  * Render functions
  */
 
-function renderInfoPanel() {
+function render_info_panel() {
   ReactDOM.render(<LLInfo/> ,document.getElementById('page-content'));
 }
 
@@ -172,12 +172,12 @@ function render_flashcard_panel() {
         on_resolve_keys={resolve_keys_handler}
         on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
     } else {
-      errorNotification("Failed to load list of words from server");
+      error_notification("Failed to load list of words from server");
     }
   });
 }
 
-function renderWordPanel(word: string) {
+function render_word_panel(word: string) {
   server.get_word(word, (word_data: LLWordData | null) => {
     if(word_data !== null) {
       ReactDOM.render(<LLWord 
@@ -186,45 +186,45 @@ function renderWordPanel(word: string) {
                           read_only={server.is_read_only()}
                           on_resolve_keys={resolve_keys_handler}
                           on_copy_word={copy_word_handler}
-                          on_word_select={wordSelectHandler}
-                          onEdit={wordUpdatedHandler}
-                          onDelete={deleteHandler}/>, 
+                          on_word_select={word_select_handler}
+                          on_edit={word_updated_handler}
+                          on_delete={delete_handler}/>, 
                       document.getElementById('page-content'));
     } else {
-      errorNotification("Failed to load word '" + word + "'");
+      error_notification("Failed to load word '" + word + "'");
     }
   });
 }
 
-function renderSearchPanel() {
+function render_search_panel() {
   server.get_words((words: string[] | null) => {
     if(words === null) {
-      errorNotification("Failed to load list of words from server");
+      error_notification("Failed to load list of words from server");
     }
     ReactDOM.render(<LLSearch 
                         read_only={server.is_read_only()}
                         default_url={server_url}
                         default_port={server_port}
                         words={words === null ? [] : words} 
-                        on_word_select={wordSelectHandler} 
+                        on_word_select={word_select_handler} 
                         on_flashcard={flashcard_handler} 
                         on_demo={demo_handler}
                         on_server_update={server_update_handler}
-                        on_new_word={newWordHandler}/>, 
+                        on_new_word={new_word_handler}/>, 
                     document.getElementById('search-panel'));
   });
 }
 
-function renderLogo() {
+function render_logo() {
   ReactDOM.render((
-      <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#/" onClick={() => renderInfoPanel()}>
+      <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#/" onClick={() => render_info_panel()}>
         <div className="sidebar-brand-icon rotate-n-15"><i className="fas fa-language"></i></div>
         <div className="sidebar-brand-text mx-3">Learn A Language</div>
       </a>
   ), document.getElementById('logo'));
 }
 
-function renderNotification(config: any) {
+function render_notification(config: any) {
   config                  = config                  || {};
   config.theme            = config.theme            || "warning";
   config.text             = config.text             || "";
@@ -237,7 +237,7 @@ function renderNotification(config: any) {
                         text={config.text} 
                         button={config.button}
                         on_button_click={config.on_button_click}
-                        on_close={notificationCloseHandler}/>, 
+                        on_close={notification_close_handler}/>, 
                   document.getElementById('notification'));
 }
 
@@ -254,7 +254,7 @@ function connect_to_server(s: LLRemoteServer) {
   });
 }
 
-renderLogo();
+render_logo();
 connect_to_server(new LLRemoteServer(server_url, server_port));
 
 serviceWorker.unregister();
