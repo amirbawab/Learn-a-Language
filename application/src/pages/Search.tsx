@@ -3,6 +3,7 @@ import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
 
 export interface LLSearchProps {
+  read_only: boolean;
   default_url: string;
   default_port: string;
   on_word_select: (word: string) => void;

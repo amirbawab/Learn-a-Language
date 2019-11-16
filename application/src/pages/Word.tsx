@@ -17,6 +17,7 @@ import LLWordData from '../models/WordData';
 import LLExampleData from '../models/ExampleData';
 
 export interface LLWordProps {
+  read_only: boolean;
   word: LLWordData;
   onDelete: (word: LLWordData) => void;
   onEdit: (word: LLWordData) => void;

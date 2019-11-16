@@ -1,6 +1,7 @@
 import LLWordData from './models/WordData';
 
 export interface LLServer {
+  is_read_only: () => boolean;
   get_words: (callback: (words: string[] | null) => void) => void;
   get_word: (word: string, callback: (word: LLWordData | null) => void) => void;
   remove_word: (word: string, callback: (success: boolean) => void) => void;
@@ -12,6 +13,9 @@ export interface LLServer {
 
 export class LLLocalServer implements LLServer {
   private data: Map<string, LLWordData> = new Map();
+  is_read_only() {
+    return false;
+  }
   is_ok(callback: (success: boolean) => void) {
     callback(true);
   }
@@ -61,6 +65,9 @@ export class LLRemoteServer implements LLServer {
       url += "/" + encodeURI(val);
     });
     return url;
+  }
+  is_read_only() {
+    return false;
   }
   is_ok(callback: (success: boolean) => void) {
     fetch(this.get_url('ok'), {mode: 'cors'})

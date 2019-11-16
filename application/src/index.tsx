@@ -183,6 +183,7 @@ function renderWordPanel(word: string) {
       ReactDOM.render(<LLWord 
                           key={word_data.get_word()}
                           word={word_data} 
+                          read_only={server.is_read_only()}
                           on_resolve_keys={resolve_keys_handler}
                           on_copy_word={copy_word_handler}
                           on_word_select={wordSelectHandler}
@@ -201,6 +202,7 @@ function renderSearchPanel() {
       errorNotification("Failed to load list of words from server");
     }
     ReactDOM.render(<LLSearch 
+                        read_only={server.is_read_only()}
                         default_url={server_url}
                         default_port={server_port}
                         words={words === null ? [] : words} 
