@@ -168,7 +168,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
           <a className="nav-link" href="#/" onClick={(e) => {this.flashcard_mode(e)}}>
-            <i className="fas fa-comment-alt"></i> Flashcard
+            <i className="fas fa-comment-alt"></i> Flashcard <small><em>({this.props.words.length})</em></small>
           </a>
         </li>
 

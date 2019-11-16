@@ -181,7 +181,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       <div className="m-2">
         <LLTitle><i className="far afa-file-word"></i> <b>Flashcard</b></LLTitle>
         <div className="row">
-          <div className="col-xl-6 col-md-6 mb-4">
+          <div className="col-md-4 mb-4">
             <LLSplitButton 
                 theme="secondary" 
                 icon="fas fa-arrow-left" 
@@ -190,7 +190,10 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
               Previous
             </LLSplitButton>
           </div>
-          <div className="col-xl-6 col-md-6 mb-4 text-right">
+          <div className="col-md-4 mb-4 text-center">
+            {(this.index >= 0) ? (this.index+1 + " / " + this.props.words.length) : "Total words: " + this.props.words.length}
+          </div>
+          <div className="col-md-4 mb-4 text-right">
             <LLSplitButton 
                 theme="secondary" 
                 icon="fas fa-arrow-right" 
