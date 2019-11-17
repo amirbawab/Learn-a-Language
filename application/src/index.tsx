@@ -8,11 +8,12 @@ import LLSearch from './pages/Search';
 import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
 import {LLServer} from './server/Server';
-import LLLocalServer from './server/LocalServer';
 import LLRemoteServer from './server/RemoteServer';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
+import LLStaticData from './data/StaticData';
 
+// Server
 var server_url = "http://localhost";
 var server_port = "3001";
 var server: LLServer;
@@ -95,17 +96,6 @@ function word_updated_handler(word: LLWordData) {
 
 function flashcard_handler() {
   render_flashcard_panel();
-}
-
-function demo_handler() {
-  demo_mode("Activated Demo mode. All data will be erased upon refreshing the page.");
-}
-
-function demo_mode(msg: string) {
-  server = new LLLocalServer();
-  warning_notification(msg);
-  render_search_panel();
-  render_info_panel();
 }
 
 function server_mode(s: LLRemoteServer) {
@@ -210,7 +200,6 @@ function render_search_panel() {
                         words={words === null ? [] : words} 
                         on_word_select={word_select_handler} 
                         on_flashcard={flashcard_handler} 
-                        on_demo={demo_handler}
                         on_server_update={server_update_handler}
                         on_new_word={new_word_handler}/>, 
                     document.getElementById('search-panel'));
@@ -250,8 +239,8 @@ function connect_to_server(s: LLRemoteServer) {
     if(success) {
       server_mode(s);
     } else {
-      demo_mode("Failed to connect to the server at " + s.to_string() + 
-        ". Switching to Demo mode. All data will be erased upon refreshing the page.");
+      render_info_panel();
+      error_notification("Failed to connect to server");
     }
   });
 }

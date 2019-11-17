@@ -1,9 +1,15 @@
 import LLWordData from '../models/WordData';
 import {LLServer} from './Server';
+import LLStaticData from '../data/StaticData';
 
 class LLRemoteServer implements LLServer {
-  constructor(private url: string, private port: string) {}
+  private static_data: LLStaticData;
   private key_map_cache: Map<string, string> = new Map();
+  constructor(private url: string, private port: string) {
+    this.static_data = new LLStaticData();
+    static_data.init_data();
+  }
+
   get_url(...args: string[]) {
     let url = this.url + ":" + this.port;
     args.forEach((val) => {

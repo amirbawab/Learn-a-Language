@@ -9,7 +9,6 @@ export interface LLSearchProps {
   on_word_select: (word: string) => void;
   on_new_word: (word: string) => void;
   on_flashcard: () => void;
-  on_demo: () => void;
   on_server_update: (url: string, port: string) => void;
   words: string[];
 }
@@ -42,11 +41,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   flashcard_mode(e: any) {
     e.preventDefault();
     this.props.on_flashcard();
-  }
-
-  demo_mode(e: any) {
-    e.preventDefault();
-    this.props.on_demo();
   }
 
   word_select(e: any, word: string) {
@@ -150,13 +144,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
             </div>
           </div>
         </form>
-
-        <hr className="sidebar-divider my-0" />
-        <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.demo_mode(e)}}>
-            <i className="fas fa-database"></i> Demo mode
-          </a>
-        </li>
 
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
