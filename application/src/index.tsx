@@ -7,7 +7,9 @@ import LLWord from './pages/Word';
 import LLSearch from './pages/Search';
 import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
-import {LLServer, LLLocalServer, LLRemoteServer} from './Server';
+import {LLServer} from './server/Server';
+import LLLocalServer from './server/LocalServer';
+import LLRemoteServer from './server/RemoteServer';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
 
