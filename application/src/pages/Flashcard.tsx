@@ -8,7 +8,7 @@ import LLExample from './sections/Example';
 import LLNative from './sections/Native';
 
 export interface LLFlashcardProps {
-  words: string[];
+  words: string[]; // TODO rename to words keys
   on_show_word: (word: string, callback: (word: LLWordData) => void) => void;
   on_resolve_keys: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;

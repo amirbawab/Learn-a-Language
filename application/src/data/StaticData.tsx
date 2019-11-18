@@ -1,8 +1,8 @@
 import LLWordData from '../models/WordData';
-const md5 = require('md5');
+import {md5, words_t} from '../Common';
 
 class LLStaticData {
-  private words: Map<string,LLWordData> = new Map<string, LLWordData>();
+  private words: words_t = new Map<string, LLWordData>();
   get_words() {
     return this.words;
   }

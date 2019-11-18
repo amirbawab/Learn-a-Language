@@ -3,46 +3,63 @@ import LLStaticData from '../data/StaticData';
 
 class LLRemoteServer {
   private static_data: LLStaticData;
-  private key_map_cache: Map<string, string> = new Map();
+  private last_connected_check = false;
   constructor(private url: string, private port: string) {
     this.static_data = new LLStaticData();
     this.static_data.init_data();
   }
 
-  get_url(...args: string[]) {
+  private make_url(...args: string[]) {
     let url = this.url + ":" + this.port;
     args.forEach((val) => {
       url += "/" + encodeURI(val);
     });
     return url;
   }
-  is_read_only() {
-    return false;
+
+  public get_url() {
+    return this.url;
   }
-  is_ok(callback: (success: boolean) => void) {
-    fetch(this.get_url('ok'), {mode: 'cors'})
-    .then(response => response.json())
-    .then((json) => {
-      callback(json.success || false);
-    })
-    .catch(() => {
-      callback(false);
-    });
+
+  public get_port() {
+    return this.port;
   }
-  get_words() : Map<string, LLWordData> {
+
+  public get_words() {
     return this.static_data.get_words();
   }
-  get_word(word: string) : LLWordData | null {
+  
+  public get_word(word: string) : LLWordData | null {
     return this.static_data.get_word(word)!;
   }
-  get_word_string_from_key(key: string): string | null {
-    if(this.key_map_cache.has(key)) {
-      return this.key_map_cache.get(key)!;
-    }
-    return null;
+  
+  public get_word_string_from_key(key: string): LLWordData | null {
+    return this.static_data.get_word_by_key(key);
   }
-  remove_word(word: string, callback: (success: boolean) => void) {
-    fetch(this.get_url('word', 'remove', word), {mode: 'cors'})
+
+  public was_ok() {
+    return this.last_connected_check;
+  }
+
+  public to_string() {
+    return "URL: " + this.get_url() + " PORT: " + this.get_port();
+  }
+
+  public is_ok(callback: () => void) {
+    fetch(this.make_url('ok'), {mode: 'cors'})
+    .then(response => response.json())
+    .then((json) => {
+      this.last_connected_check = json.success || false;
+      callback();
+    })
+    .catch(() => {
+      this.last_connected_check = false;
+      callback();
+    });
+  }
+  
+  public remove_word(word: string, callback: (success: boolean) => void) {
+    fetch(this.make_url('word', 'remove', word), {mode: 'cors'})
     .then(response => response.json())
     .then((json) => {
       callback(json.success);
@@ -50,8 +67,9 @@ class LLRemoteServer {
       callback(false);
     });
   }
-  set_word(word: LLWordData, callback: (success: boolean) => void) {
-    fetch(this.get_url('word','set'), {
+  
+  public set_word(word: LLWordData, callback: (success: boolean) => void) {
+    fetch(this.make_url('word','set'), {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -68,9 +86,6 @@ class LLRemoteServer {
     }).catch(() => {
       callback(false);
     });
-  }
-  to_string() {
-    return "URL: " + this.url + " and Port: " + this.port;
   }
 }
 

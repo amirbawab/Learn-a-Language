@@ -9,8 +9,7 @@ import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
 import LLRemoteServer from './server/RemoteServer';
 import LLWordData from './models/WordData';
-import LLUtils from './Utils';
-import LLStaticData from './data/StaticData';
+import {shuffle} from './Common';
 
 // Server
 var server_url = "http://localhost";
@@ -43,10 +42,6 @@ function error_notification(text: string) {
 
 function success_notification(text: string) {
   render_notification({theme: "success", hidden: false, text: text});
-}
-
-function warning_notification(text: string) {
-  render_notification({theme: "warning", hidden: false, text: text});
 }
 
 /**
@@ -147,18 +142,14 @@ function render_info_panel() {
 }
 
 function render_flashcard_panel() {
-  // server.get_words((words: string[] | null) => {
-  //   if(words !== null) {
-  //     LLUtils.shuffle(words);
-  //     ReactDOM.render(<LLFlashcard 
-  //       words={words} 
-  //       on_word_select={flashcard_word_select_handler}
-  //       on_resolve_keys={resolve_keys_handler}
-  //       on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
-  //   } else {
-  //     error_notification("Failed to load list of words from server");
-  //   }
-  // });
+  let words_keys = Array.from(server.get_words().keys());
+  shuffle(words_keys);
+  console.log(words_keys)
+  ReactDOM.render(<LLFlashcard
+    words={words_keys}
+    on_word_select={flashcard_word_select_handler}
+    on_resolve_keys={resolve_keys_handler}
+    on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
 }
 
 function render_word_panel(word: string) {
@@ -167,7 +158,7 @@ function render_word_panel(word: string) {
     ReactDOM.render(<LLWord 
                         key={word_data.get_word()}
                         word={word_data} 
-                        read_only={server.is_read_only()}
+                        read_only={!server.was_ok()}
                         on_resolve_keys={resolve_keys_handler}
                         on_copy_word={copy_word_handler}
                         on_word_select={word_select_handler}
@@ -182,7 +173,7 @@ function render_word_panel(word: string) {
 function render_search_panel() {
   let words = server.get_words();
   ReactDOM.render(<LLSearch 
-                      read_only={server.is_read_only()}
+                      read_only={!server.was_ok()}
                       default_url={server_url}
                       default_port={server_port}
                       words={Array.from(words.values())} 
@@ -223,12 +214,11 @@ function render_notification(config: any) {
 
 function connect_to_server(url: string, port: string) {
   server = new LLRemoteServer(url, port);
-  server.is_ok((success: boolean) => {
-    if(success) {
-      success_notification("Successfully connected to " + server.to_string());
-      // TODO mark as read only
+  server.is_ok(() => {
+    if(server.was_ok()) {
+      success_notification("Successfully connected to server " + server.to_string());
     } else {
-      error_notification("Failed to connect to server");
+      error_notification("Failed to connect to server " + server.to_string());
     }
     render_search_panel();
     render_info_panel();

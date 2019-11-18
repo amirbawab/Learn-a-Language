@@ -95,7 +95,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
   render() { 
     let new_word_form = undefined;
-    if(!this.state.new_word_form_hidden) {
+    if(!this.state.new_word_form_hidden && !this.props.read_only) {
       new_word_form = (
         <div className="small col-md-12 text-white">
           <LLOkCancelForm 
@@ -106,6 +106,20 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
             <LLLabelInput ref="new_word" label="Word"/>
           </LLOkCancelForm>
         </div>
+      );
+    }
+
+    let new_word_button = undefined;
+    if(!this.props.read_only) {
+      new_word_button = (
+        <React.Fragment>
+          <hr className="sidebar-divider my-0" />
+          <li className="nav-item">
+            <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
+              <i className="fas fa-plus-square"></i> New Word
+            </a>
+          </li>
+        </React.Fragment>
       );
     }
 
@@ -161,12 +175,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
           </a>
         </li>
 
-        <hr className="sidebar-divider my-0" />
-        <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
-            <i className="fas fa-plus-square"></i> New Word
-          </a>
-        </li>
+        {new_word_button}
         {new_word_form}
 
         <hr className="sidebar-divider my-0" />

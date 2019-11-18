@@ -1,6 +1,6 @@
 import LLExampleData from './ExampleData';
 import LLSoundData from './SoundData';
-const md5 = require("md5");
+import {md5} from '../Common';
 
 class LLWordData {
   private pronunciations: LLSoundData[] = [];
