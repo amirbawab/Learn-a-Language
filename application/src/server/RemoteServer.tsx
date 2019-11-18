@@ -1,13 +1,12 @@
 import LLWordData from '../models/WordData';
-import {LLServer} from './Server';
 import LLStaticData from '../data/StaticData';
 
-class LLRemoteServer implements LLServer {
+class LLRemoteServer {
   private static_data: LLStaticData;
   private key_map_cache: Map<string, string> = new Map();
   constructor(private url: string, private port: string) {
     this.static_data = new LLStaticData();
-    static_data.init_data();
+    this.static_data.init_data();
   }
 
   get_url(...args: string[]) {
@@ -30,28 +29,11 @@ class LLRemoteServer implements LLServer {
       callback(false);
     });
   }
-  get_words(callback: (words: (string[] | null)) => void) {
-    fetch(this.get_url('words'), {mode: 'cors'})
-    .then(response => response.json())
-    .then((json) => {
-      this.key_map_cache.clear();
-      json.words.forEach((word: string) => {
-        this.key_map_cache.set(new LLWordData(word).get_md5(), word);
-      });
-      callback(json.words);
-    })
-    .catch(() => {
-      callback(null);
-    });
+  get_words() : Map<string, LLWordData> {
+    return this.static_data.get_words();
   }
-  get_word(word: string, callback: (word: LLWordData | null) => void) {
-    fetch(this.get_url('word', 'view', word), {mode: 'cors'})
-    .then(response => response.json())
-    .then((json) => {
-      callback(LLWordData.from_json(json));
-    }).catch(() => {
-      callback(null);
-    });
+  get_word(word: string) : LLWordData | null {
+    return this.static_data.get_word(word)!;
   }
   get_word_string_from_key(key: string): string | null {
     if(this.key_map_cache.has(key)) {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
+import LLWordData from '../models/WordData';
 
 export interface LLSearchProps {
   read_only: boolean;
@@ -10,7 +11,7 @@ export interface LLSearchProps {
   on_new_word: (word: string) => void;
   on_flashcard: () => void;
   on_server_update: (url: string, port: string) => void;
-  words: string[];
+  words: LLWordData[];
 }
  
 export interface LLSearchState {}
@@ -43,9 +44,9 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     this.props.on_flashcard();
   }
 
-  word_select(e: any, word: string) {
+  word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_word_select(word);
+    this.props.on_word_select(word.get_word());
   }
 
   on_new_word() {
@@ -69,7 +70,8 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     this.props.on_server_update(url_input.value(), port_input.value());
   }
 
-  search_includes(word: string) {
+  search_includes(word_data: LLWordData) {
+    let word = word_data.get_word();
     let search_text = this.state.search_text;
     if(search_text.length > word.length) {
       return false;
@@ -77,7 +79,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
     // Ignore case sensitivity
     search_text = search_text.toLowerCase();
-    word = word.toLowerCase();
 
     // Letters in the search field must exist
     // in the target 'word' and in the same order
@@ -171,12 +172,12 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         <hr className="sidebar-divider my-0" />
         <div style={{height: "350px"}}>
           <div className="overflow-auto h-100 d-inline-block">
-            {this.props.words.map((word, id) => {
+            {this.props.words.map((word: LLWordData, id: number) => {
               return (
                 <React.Fragment key={id}>
                   {this.search_includes(word) ? (
                     <li className="nav-item">
-                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word}</a>
+                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word.get_word()}</a>
                     </li>
                   ) : undefined}
                 </React.Fragment>

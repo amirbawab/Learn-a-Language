@@ -7,7 +7,6 @@ import LLWord from './pages/Word';
 import LLSearch from './pages/Search';
 import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
-import {LLServer} from './server/Server';
 import LLRemoteServer from './server/RemoteServer';
 import LLWordData from './models/WordData';
 import LLUtils from './Utils';
@@ -16,7 +15,7 @@ import LLStaticData from './data/StaticData';
 // Server
 var server_url = "http://localhost";
 var server_port = "3001";
-var server: LLServer;
+var server: LLRemoteServer;
 
 /**
  * Notification functions
@@ -98,25 +97,18 @@ function flashcard_handler() {
   render_flashcard_panel();
 }
 
-function server_mode(s: LLRemoteServer) {
-  server = s;
-  success_notification("Successfully connected to " + server.to_string());
-  render_search_panel();
-  render_info_panel();
-}
-
 function server_update_handler(url: string, port: string) {
-  connect_to_server(new LLRemoteServer(url, port))
+  connect_to_server(url, port);
 }
 
 function flashcard_show_word_handler(word: string, callback: (word: LLWordData) => void) {
-  server.get_word(word, (word_data: LLWordData | null) => {
-    if(word_data !== null) {
-      callback(word_data);
-    } else {
-      error_notification("Failed to load flashcard word '" + word + "'");
-    }
-  });
+  // server.get_word(word, (word_data: LLWordData | null) => {
+  //   if(word_data !== null) {
+  //     callback(word_data);
+  //   } else {
+  //     error_notification("Failed to load flashcard word '" + word + "'");
+  //   }
+  // });
 }
 
 function copy_word_handler(word: LLWordData) {
@@ -155,55 +147,50 @@ function render_info_panel() {
 }
 
 function render_flashcard_panel() {
-  server.get_words((words: string[] | null) => {
-    if(words !== null) {
-      LLUtils.shuffle(words);
-      ReactDOM.render(<LLFlashcard 
-        words={words} 
-        on_word_select={flashcard_word_select_handler}
-        on_resolve_keys={resolve_keys_handler}
-        on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
-    } else {
-      error_notification("Failed to load list of words from server");
-    }
-  });
+  // server.get_words((words: string[] | null) => {
+  //   if(words !== null) {
+  //     LLUtils.shuffle(words);
+  //     ReactDOM.render(<LLFlashcard 
+  //       words={words} 
+  //       on_word_select={flashcard_word_select_handler}
+  //       on_resolve_keys={resolve_keys_handler}
+  //       on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
+  //   } else {
+  //     error_notification("Failed to load list of words from server");
+  //   }
+  // });
 }
 
 function render_word_panel(word: string) {
-  server.get_word(word, (word_data: LLWordData | null) => {
-    if(word_data !== null) {
-      ReactDOM.render(<LLWord 
-                          key={word_data.get_word()}
-                          word={word_data} 
-                          read_only={server.is_read_only()}
-                          on_resolve_keys={resolve_keys_handler}
-                          on_copy_word={copy_word_handler}
-                          on_word_select={word_select_handler}
-                          on_edit={word_updated_handler}
-                          on_delete={delete_handler}/>, 
-                      document.getElementById('page-content'));
-    } else {
-      error_notification("Failed to load word '" + word + "'");
-    }
-  });
+  let word_data = server.get_word(word);
+  if(word_data !== null) {
+    ReactDOM.render(<LLWord 
+                        key={word_data.get_word()}
+                        word={word_data} 
+                        read_only={server.is_read_only()}
+                        on_resolve_keys={resolve_keys_handler}
+                        on_copy_word={copy_word_handler}
+                        on_word_select={word_select_handler}
+                        on_edit={word_updated_handler}
+                        on_delete={delete_handler}/>, 
+                    document.getElementById('page-content'));
+  } else {
+    error_notification("Failed to load word '" + word + "'");
+  }
 }
 
 function render_search_panel() {
-  server.get_words((words: string[] | null) => {
-    if(words === null) {
-      error_notification("Failed to load list of words from server");
-    }
-    ReactDOM.render(<LLSearch 
-                        read_only={server.is_read_only()}
-                        default_url={server_url}
-                        default_port={server_port}
-                        words={words === null ? [] : words} 
-                        on_word_select={word_select_handler} 
-                        on_flashcard={flashcard_handler} 
-                        on_server_update={server_update_handler}
-                        on_new_word={new_word_handler}/>, 
-                    document.getElementById('search-panel'));
-  });
+  let words = server.get_words();
+  ReactDOM.render(<LLSearch 
+                      read_only={server.is_read_only()}
+                      default_url={server_url}
+                      default_port={server_port}
+                      words={Array.from(words.values())} 
+                      on_word_select={word_select_handler} 
+                      on_flashcard={flashcard_handler} 
+                      on_server_update={server_update_handler}
+                      on_new_word={new_word_handler}/>, 
+                  document.getElementById('search-panel'));
 }
 
 function render_logo() {
@@ -234,18 +221,21 @@ function render_notification(config: any) {
 
 // Render default panels
 
-function connect_to_server(s: LLRemoteServer) {
-  s.is_ok((success: boolean) => {
+function connect_to_server(url: string, port: string) {
+  server = new LLRemoteServer(url, port);
+  server.is_ok((success: boolean) => {
     if(success) {
-      server_mode(s);
+      success_notification("Successfully connected to " + server.to_string());
+      // TODO mark as read only
     } else {
-      render_info_panel();
       error_notification("Failed to connect to server");
     }
+    render_search_panel();
+    render_info_panel();
   });
 }
 
 render_logo();
-connect_to_server(new LLRemoteServer(server_url, server_port));
+connect_to_server(server_url, server_port);
 
 serviceWorker.unregister();
