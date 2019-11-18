@@ -5,8 +5,6 @@ import LLWordData from '../models/WordData';
 
 export interface LLSearchProps {
   read_only: boolean;
-  default_url: string;
-  default_port: string;
   on_word_select: (word: string) => void;
   on_new_word: (word: string) => void;
   on_flashcard: () => void;
@@ -21,8 +19,8 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     new_word_form_hidden: true,
     server_form_hidden: true,
     search_text: "",
-    server_url_text: this.props.default_url,
-    server_port_text: this.props.default_port
+    server_url_text: "http://localhost",
+    server_port_text: "3001"
   }
 
   set_new_word_form_hidden(e: any, is_hidden : boolean) {

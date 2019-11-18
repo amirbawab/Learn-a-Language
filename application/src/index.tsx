@@ -12,9 +12,7 @@ import LLWordData from './models/WordData';
 import {shuffle} from './Common';
 
 // Server
-var server_url = "http://localhost";
-var server_port = "3001";
-var server: LLRemoteServer;
+var server = new LLRemoteServer(null, null);
 
 /**
  * Notification functions
@@ -67,8 +65,7 @@ function save_handler(word: LLWordData) {
 function delete_handler(word: LLWordData) {
   server.remove_word(word.get_word(), (success: boolean) => {
     if(success) {
-      render_search_panel();
-      render_info_panel();
+      render_homepage();
       success_notification("Word '" + word.get_word() + "' was deleted successfully");
     } else {
       error_notification("Failed to delete '" + word.get_word()+"'");
@@ -96,14 +93,13 @@ function server_update_handler(url: string, port: string) {
   connect_to_server(url, port);
 }
 
-function flashcard_show_word_handler(word: string, callback: (word: LLWordData) => void) {
-  // server.get_word(word, (word_data: LLWordData | null) => {
-  //   if(word_data !== null) {
-  //     callback(word_data);
-  //   } else {
-  //     error_notification("Failed to load flashcard word '" + word + "'");
-  //   }
-  // });
+function flashcard_show_word_handler(key: string, callback: (word: LLWordData) => void) {
+  let word_data = server.get_word_by_key(key);
+  if(word_data !== null) {
+    callback(word_data);
+  } else {
+    error_notification("Failed to load flashcard word");
+  }
 }
 
 function copy_word_handler(word: LLWordData) {
@@ -113,9 +109,9 @@ function copy_word_handler(word: LLWordData) {
 function resolve_keys_handler(keys: string[]) {
   let result: Map<string, string> = new Map();
   keys.forEach((key: string) => {
-    let word = server.get_word_string_from_key(key);
-    if(word !== null) {
-      result.set(key, String(word));
+    let word_data = server.get_word_by_key(key);
+    if(word_data !== null) {
+      result.set(key, word_data.get_word());
     }
   });
   return result;
@@ -141,12 +137,17 @@ function render_info_panel() {
   ReactDOM.render(<LLInfo/> ,document.getElementById('page-content'));
 }
 
+function render_homepage() {
+  render_logo();
+  render_search_panel();
+  render_info_panel();
+}
+
 function render_flashcard_panel() {
   let words_keys = Array.from(server.get_words().keys());
   shuffle(words_keys);
-  console.log(words_keys)
   ReactDOM.render(<LLFlashcard
-    words={words_keys}
+    words_keys={words_keys}
     on_word_select={flashcard_word_select_handler}
     on_resolve_keys={resolve_keys_handler}
     on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
@@ -174,8 +175,6 @@ function render_search_panel() {
   let words = server.get_words();
   ReactDOM.render(<LLSearch 
                       read_only={!server.was_ok()}
-                      default_url={server_url}
-                      default_port={server_port}
                       words={Array.from(words.values())} 
                       on_word_select={word_select_handler} 
                       on_flashcard={flashcard_handler} 
@@ -220,12 +219,11 @@ function connect_to_server(url: string, port: string) {
     } else {
       error_notification("Failed to connect to server " + server.to_string());
     }
-    render_search_panel();
-    render_info_panel();
+    render_homepage();
   });
 }
 
-render_logo();
-connect_to_server(server_url, server_port);
-
-serviceWorker.unregister();
+(() => {
+  render_homepage();
+  serviceWorker.unregister();
+})();

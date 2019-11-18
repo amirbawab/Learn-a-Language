@@ -8,7 +8,7 @@ import LLExample from './sections/Example';
 import LLNative from './sections/Native';
 
 export interface LLFlashcardProps {
-  words: string[]; // TODO rename to words keys
+  words_keys: string[];
   on_show_word: (word: string, callback: (word: LLWordData) => void) => void;
   on_resolve_keys: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
@@ -39,10 +39,10 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
   }
 
   next() {
-    if(this.props.words.length > 0) {
-      this.index = (this.index + 1) % this.props.words.length;
+    if(this.props.words_keys.length > 0) {
+      this.index = (this.index + 1) % this.props.words_keys.length;
       console.log(this.index);
-      this.props.on_show_word(this.props.words[this.index], (word: LLWordData) => {
+      this.props.on_show_word(this.props.words_keys[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
     }
@@ -50,10 +50,10 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
   }
 
   previous() {
-    if(this.props.words.length > 0) {
-      this.index = (this.index + (this.props.words.length - 1)) % this.props.words.length;
+    if(this.props.words_keys.length > 0) {
+      this.index = (this.index + (this.props.words_keys.length - 1)) % this.props.words_keys.length;
       console.log(this.index);
-      this.props.on_show_word(this.props.words[this.index], (word: LLWordData) => {
+      this.props.on_show_word(this.props.words_keys[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
     }
@@ -191,7 +191,11 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
             </LLSplitButton>
           </div>
           <div className="col-md-4 mb-4 text-center">
-            {(this.index >= 0) ? (this.index+1 + " / " + this.props.words.length) : "Total words: " + this.props.words.length}
+            {
+              (this.index >= 0) ? 
+              (this.index+1 + " / " + this.props.words_keys.length) : 
+              "Total words: " + this.props.words_keys.length
+            }
           </div>
           <div className="col-md-4 mb-4 text-right">
             <LLSplitButton 
