@@ -1,17 +1,15 @@
 import * as React from 'react';
 import {LLOkCancelForm} from '../components/Form';
 import {LLLabelInput} from '../components/Input';
+import LLWordData from '../models/WordData';
 
 export interface LLSearchProps {
   read_only: boolean;
-  default_url: string;
-  default_port: string;
   on_word_select: (word: string) => void;
   on_new_word: (word: string) => void;
   on_flashcard: () => void;
-  on_demo: () => void;
   on_server_update: (url: string, port: string) => void;
-  words: string[];
+  words: LLWordData[];
 }
  
 export interface LLSearchState {}
@@ -21,8 +19,8 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     new_word_form_hidden: true,
     server_form_hidden: true,
     search_text: "",
-    server_url_text: this.props.default_url,
-    server_port_text: this.props.default_port
+    server_url_text: "http://localhost",
+    server_port_text: "3001"
   }
 
   set_new_word_form_hidden(e: any, is_hidden : boolean) {
@@ -44,14 +42,9 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     this.props.on_flashcard();
   }
 
-  demo_mode(e: any) {
+  word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_demo();
-  }
-
-  word_select(e: any, word: string) {
-    e.preventDefault();
-    this.props.on_word_select(word);
+    this.props.on_word_select(word.get_word());
   }
 
   on_new_word() {
@@ -75,7 +68,8 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     this.props.on_server_update(url_input.value(), port_input.value());
   }
 
-  search_includes(word: string) {
+  search_includes(word_data: LLWordData) {
+    let word = word_data.get_word();
     let search_text = this.state.search_text;
     if(search_text.length > word.length) {
       return false;
@@ -83,7 +77,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
     // Ignore case sensitivity
     search_text = search_text.toLowerCase();
-    word = word.toLowerCase();
 
     // Letters in the search field must exist
     // in the target 'word' and in the same order
@@ -100,7 +93,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
   render() { 
     let new_word_form = undefined;
-    if(!this.state.new_word_form_hidden) {
+    if(!this.state.new_word_form_hidden && !this.props.read_only) {
       new_word_form = (
         <div className="small col-md-12 text-white">
           <LLOkCancelForm 
@@ -111,6 +104,20 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
             <LLLabelInput ref="new_word" label="Word"/>
           </LLOkCancelForm>
         </div>
+      );
+    }
+
+    let new_word_button = undefined;
+    if(!this.props.read_only) {
+      new_word_button = (
+        <React.Fragment>
+          <hr className="sidebar-divider my-0" />
+          <li className="nav-item">
+            <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
+              <i className="fas fa-plus-square"></i> New Word
+            </a>
+          </li>
+        </React.Fragment>
       );
     }
 
@@ -153,13 +160,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.demo_mode(e)}}>
-            <i className="fas fa-database"></i> Demo mode
-          </a>
-        </li>
-
-        <hr className="sidebar-divider my-0" />
-        <li className="nav-item">
           <a className="nav-link" href="#/" onClick={(e) => {this.set_server_form_hidden(e, false)}}>
             <i className="fas fa-server"></i> Server
           </a>
@@ -173,23 +173,18 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
           </a>
         </li>
 
-        <hr className="sidebar-divider my-0" />
-        <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
-            <i className="fas fa-plus-square"></i> New Word
-          </a>
-        </li>
+        {new_word_button}
         {new_word_form}
 
         <hr className="sidebar-divider my-0" />
         <div style={{height: "350px"}}>
           <div className="overflow-auto h-100 d-inline-block">
-            {this.props.words.map((word, id) => {
+            {this.props.words.map((word: LLWordData, id: number) => {
               return (
                 <React.Fragment key={id}>
                   {this.search_includes(word) ? (
                     <li className="nav-item">
-                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word}</a>
+                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word.get_word()}</a>
                     </li>
                   ) : undefined}
                 </React.Fragment>

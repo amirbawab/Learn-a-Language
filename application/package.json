@@ -8,18 +8,24 @@
     "@types/node": "12.12.5",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
+    "concurrently": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "md5": "^2.2.1",
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "watch": "^1.0.2",
+    "yargs": "^15.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "application": "node ./engine.js && react-scripts start",
+    "application_watch": "concurrently \"node ./engine.js --watch\" \"react-scripts start\"",
+    "build": "node ./engine.js && react-scripts build",
+    "engine": "node ./engine.js",
+    "server": "node ./server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
