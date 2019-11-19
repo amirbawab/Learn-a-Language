@@ -14,8 +14,6 @@
     - [Back-end](#back-end-1)
   - [Data Files](#data-files)
 - [Import/Export Data Files](#importexport-data-files)
-- [Custom Properties](#custom-properties)
-  - [Server](#server)
 
 ## Manually
 ### Build
@@ -40,15 +38,7 @@ cd $REPO/server
 npm start
 ```
 ### Data Files
-By default, data files are stored under "$REPO/server/data/". For more info check [Custom Properties](#custom-properties).
+By default, data files are stored under "$REPO/server/data/"
 
 ## Import/Export Data Files
 Simply copy the JSON data files into another project or for backup.
-
-## Custom Properties
-### Server
-To change server properties, create `server.properties` file inside the `$REPO/server/` directory:
-```
-port=3001           # default is 3001
-data_dir=/tmp/data  # default is './data'
-```
