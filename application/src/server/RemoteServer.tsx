@@ -99,7 +99,11 @@ class LLRemoteServer {
     })
     .then(response => response.json())
     .then((json) => {
-      callback(json.success);
+      let success_val = json.success || false;
+      if(success_val) {
+        this.static_data.add_word(word);
+      }
+      callback(success_val);
     }).catch(() => {
       callback(false);
     });

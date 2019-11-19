@@ -42,6 +42,10 @@ function success_notification(text: string) {
   render_notification({theme: "success", hidden: false, text: text});
 }
 
+function warning_notification(text: string) {
+  render_notification({theme: "warning", hidden: false, text: text});
+}
+
 /**
  * Event handlers
  */
@@ -82,7 +86,11 @@ function word_select_handler(word: string) {
 }
 
 function word_updated_handler(word: LLWordData) {
-  save_notification(word, "Click 'Save' after done editing, or Refresh to abort the changes");
+  save_notification(word, "Click 'Save' after done editing, or 'Undo' to abort the changes");
+}
+
+function word_reverted_handler(word: LLWordData) {
+  warning_notification("Changes for '" + word.get_word() + "' were discarded");
 }
 
 function flashcard_handler() {
@@ -164,6 +172,7 @@ function render_word_panel(word: string) {
                         on_copy_word={copy_word_handler}
                         on_word_select={word_select_handler}
                         on_edit={word_updated_handler}
+                        on_undo={word_reverted_handler}
                         on_delete={delete_handler}/>, 
                     document.getElementById('page-content'));
   } else {

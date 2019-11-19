@@ -21,6 +21,7 @@ export interface LLWordProps {
   word: LLWordData;
   on_delete: (word: LLWordData) => void;
   on_edit: (word: LLWordData) => void;
+  on_undo: (word: LLWordData) => void;
   on_copy_word: (word: LLWordData) => void;
   on_resolve_keys: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
@@ -30,12 +31,18 @@ export interface LLWordState {}
  
 class LLWord extends React.Component<LLWordProps, LLWordState> {
   state = {
-    word: this.props.word,
+    word: this.props.word.clone(),
     copy_form_hidden: true
   }
 
   set_copy_form_hidden(is_hidden: boolean) {
     this.setState({copy_form_hidden: is_hidden});
+    return false;
+  }
+
+  undo_changes() {
+    this.setState({word: this.props.word.clone()});
+    this.props.on_undo(this.state.word);
     return false;
   }
 
@@ -108,6 +115,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     }
 
     let copy_button = undefined;
+    let undo_button = undefined;
     let delete_button = undefined;
     if(!this.props.read_only) {
       copy_button = (
@@ -117,6 +125,16 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
             icon="far fa-copy" 
             on_click={() => this.set_copy_form_hidden(false)}>
           Copy Word
+        </LLSplitButton>
+      );
+
+      undo_button = (
+        <LLSplitButton 
+            theme="danger" 
+            extra_class="btn-sm float-right mr-2"
+            icon="far fa-trash-alt" 
+            on_click={() => this.undo_changes()}>
+          Undo Changes
         </LLSplitButton>
       );
 
@@ -135,6 +153,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
           <div>
             <i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b>
             {copy_button}
+            {undo_button}
           </div>
           <div>
             <small style={{fontSize:15}}className="text-secondary"><em>key: {this.state.word.get_md5()}</em></small>
