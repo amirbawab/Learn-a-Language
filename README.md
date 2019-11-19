@@ -13,10 +13,6 @@
     - [Front-end](#front-end-1)
     - [Back-end](#back-end-1)
   - [Data Files](#data-files)
-- [Docker](#docker)
-  - [Build](#build-1)
-  - [Run](#run-1)
-  - [Data Files](#data-files-1)
 - [Import/Export Data Files](#importexport-data-files)
 - [Custom Properties](#custom-properties)
   - [Server](#server)
@@ -45,21 +41,6 @@ npm start
 ```
 ### Data Files
 By default, data files are stored under "$REPO/server/data/". For more info check [Custom Properties](#custom-properties).
-
-## Docker
-### Build
-```
-sudo docker build -t learn-a-language:latest .
-```
-### Run
-```
-sudo docker run --name example -p 3000:3000 -p 3001:3001 -v $REPO/server/data:/usr/src/app/server/data -it learn-a-language:latest
-```
-Go to [http://localhost:3000/](http://localhost:3000/)
-
-### Data Files
-To access the data files, make sure to share the volume "server/data/" between the host and the container as
-shown in the [Run](#run-1) section.
 
 ## Import/Export Data Files
 Simply copy the JSON data files into another project or for backup.
