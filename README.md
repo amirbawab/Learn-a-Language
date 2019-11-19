@@ -1,7 +1,7 @@
 # Learn a Language
 
 ## Live Demo
-[Demo Link](https://amirbawab.github.io/Learn-a-Language/application/)  
+[Demo Link](https://amirbawab.github.io/Learn-a-Language/)  
 **Note:** All data are cleared upon refresh
 
 ## Table of Contents
