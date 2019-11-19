@@ -1,0 +1,16 @@
+name: Learn a Language
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: Installing packages
+      run: cd application && npm install
+    - name: Building application
+      run: cd application && npm run build
