@@ -102,34 +102,18 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       if(!this.state.hide_native) {
         native_section = (
           <LLNative
-                read_only={true}
                 on_resolve_keys={this.props.on_resolve_keys}
-                on_add={() => {}} 
-                on_delete={() => {}} 
                 on_word_select={this.props.on_word_select}
                 data={this.state.word.get_natives()}/>
         );
       }
 
       if(!this.state.hide_pronunciation) {
-        pronunciation_section = (
-          <LLPronunciation  
-                read_only={true}
-                on_add={() => {}} 
-                on_delete={() => {}} 
-                data={this.state.word.get_pronunciations()}/>
-        ); 
+        pronunciation_section = <LLPronunciation data={this.state.word.get_pronunciations()}/>; 
       }
 
       if(!this.state.hide_example) {
-        example_section = (
-          <LLExample 
-                read_only={true}
-                on_add={() => {}}
-                on_delete={() => {}}
-                on_example_update={() => {}}
-                data={this.state.word.get_examples()}/>
-        );
+        example_section = <LLExample data={this.state.word.get_examples()}/>;
       }
 
       main_page = (
