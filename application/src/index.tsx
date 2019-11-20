@@ -10,7 +10,6 @@ import LLNotification from './pages/Notification';
 import LLRemoteServer from './server/RemoteServer';
 import LLWordData from './models/WordData';
 import {shuffle} from './Common';
-import {version} from './Build';
 
 // Server
 var server = new LLRemoteServer(null, null);
@@ -194,15 +193,31 @@ function render_search_panel() {
 }
 
 function render_logo() {
-  ReactDOM.render((
-      <div className="mb-3">
-        <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#/" onClick={() => render_info_panel()}>
-          <div className="sidebar-brand-icon rotate-n-15"><i className="fas fa-language"></i></div>
-          <div className="sidebar-brand-text mx-3">Learn A Language</div>
-        </a>
-        <div className="text-center"><small className="text-white">{version}</small></div>
-      </div>
-  ), document.getElementById('logo'));
+  let make_logo = (version: string) => {
+    ReactDOM.render((
+        <div className="mb-3">
+          <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#/" onClick={() => render_info_panel()}>
+            <div className="sidebar-brand-icon rotate-n-15"><i className="fas fa-language"></i></div>
+            <div className="sidebar-brand-text mx-3">Learn A Language</div>
+          </a>
+          <div className="text-center"><small className="text-white">{version}</small></div>
+        </div>
+    ), document.getElementById('logo'));
+  };
+
+  fetch('./version.txt', {headers: {'Accept': 'text/plain'}})
+  .then((r) => {
+    if(!r.ok) {
+      throw Error(r.statusText);
+    }
+    return r.text()
+  })
+  .then((text) => {
+    make_logo(text);
+  })
+  .catch((error) => {
+    make_logo("unknown-version");
+  })
 }
 
 function render_notification(config: any) {
