@@ -3,7 +3,7 @@ import {LLBorderCard} from '../../components/Card';
 
 export interface LLNativeProps {
   data: string[];
-  on_resolve_keys: (array: string[]) => Map<string, string>;
+  on_resolve_aliases: (array: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
 }
 export interface LLNativeState {}
@@ -12,19 +12,19 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
     e.preventDefault();
     this.props.on_word_select(word);
   }
-  resolve_keys(val: string) {
-    let regex = /(#\w{32})/g;
+  resolve_aliases(val: string) {
+    let regex = /(#\w+)/g;
     let match = undefined;
-    let md5_array = [];
+    let alias_array = [];
     let html = <React.Fragment>{val}</React.Fragment>;
 
     // find all keys
     while((match = regex.exec(val))) {
-      md5_array.push(match[0].slice(1));
+      alias_array.push(match[0].slice(1));
     }
     // resolve them
-    if(md5_array.length > 0) {
-      let result = this.props.on_resolve_keys(md5_array);
+    if(alias_array.length > 0) {
+      let result = this.props.on_resolve_aliases(alias_array);
       let regex_val = ""
       // build regex
       result.forEach((word: string, key: string) => {
@@ -65,7 +65,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
           {this.props.data.map((val, id) => {
             return (
               <LLBorderCard  key={id} theme="info" title="Native form" icon="fas fa-language">
-                {this.resolve_keys(val)}
+                {this.resolve_aliases(val)}
               </LLBorderCard>
             );
           })}

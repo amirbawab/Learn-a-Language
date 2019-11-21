@@ -1,12 +1,12 @@
 {
-  "word":"Tea",
-  "alias":"tea",
-  "native_form":["茶"],
+  "word":"Good",
+  "alias":"good",
+  "native_form":["好"],
   "example":[],
   "pronunciation":[
     {
       "language":"English",
-      "sound":"Chai"
+      "sound":"hao"
     }
   ]
 }

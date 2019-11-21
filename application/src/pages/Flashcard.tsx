@@ -10,7 +10,7 @@ import LLNative from './sections/Native';
 export interface LLFlashcardProps {
   words_keys: string[];
   on_show_word: (word: string, callback: (word: LLWordData) => void) => void;
-  on_resolve_keys: (keys: string[]) => Map<string, string>;
+  on_resolve_aliases: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
 }
 export interface LLFlashcardState {}
@@ -102,7 +102,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       if(!this.state.hide_native) {
         native_section = (
           <LLNative
-                on_resolve_keys={this.props.on_resolve_keys}
+                on_resolve_aliases={this.props.on_resolve_aliases}
                 on_word_select={this.props.on_word_select}
                 data={this.state.word.get_natives()}/>
         );

@@ -36,7 +36,7 @@ class LLWordData {
   public get_alias() {
     return this.alias;
   }
-  public get_md5() {
+  public get_key() {
     return md5(this.get_word());
   }
   public add_native(native_form: string) {

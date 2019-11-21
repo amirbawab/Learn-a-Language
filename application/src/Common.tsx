@@ -1,7 +1,4 @@
-import LLWordData from './models/WordData';
 const md5_lib = require('md5');
-
-export type words_t = Map<string,LLWordData>;
 
 export function md5(text: string): string {
   return md5_lib(text);

@@ -22,8 +22,7 @@
   },
   "scripts": {
     "git-version": "git describe --tags > public/version.txt",
-    "application": "npm run git-version && node ./engine.js && react-scripts start",
-    "application_watch": "concurrently \"node ./engine.js --watch\" \"react-scripts start\"",
+    "application": "npm run git-version && concurrently \"node ./engine.js --watch\" \"react-scripts start\"",
     "build": "npm run git-version && node ./engine.js && react-scripts build",
     "engine": "node ./engine.js",
     "server": "node ./server.js"

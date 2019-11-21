@@ -51,12 +51,12 @@ function flashcard_show_word_handler(key: string, callback: (word: LLWordData) =
   }
 }
 
-function resolve_keys_handler(keys: string[]) {
+function resolve_aliases_handler(aliases: string[]) {
   let result: Map<string, string> = new Map();
-  keys.forEach((key: string) => {
-    let word_data = static_data.get_word_by_key(key);
+  aliases.forEach((alias: string) => {
+    let word_data = static_data.get_word_by_alias(alias);
     if(word_data !== null) {
-      result.set(key, word_data.get_word());
+      result.set(alias, word_data.get_word());
     }
   });
   return result;
@@ -94,7 +94,7 @@ function render_flashcard_panel() {
   ReactDOM.render(<LLFlashcard
     words_keys={words_keys}
     on_word_select={flashcard_word_select_handler}
-    on_resolve_keys={resolve_keys_handler}
+    on_resolve_aliases={resolve_aliases_handler}
     on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
 }
 
@@ -104,7 +104,7 @@ function render_word_panel(word: string) {
     ReactDOM.render(<LLWord 
                         key={word_data.get_word()}
                         word={word_data} 
-                        on_resolve_keys={resolve_keys_handler}
+                        on_resolve_aliases={resolve_aliases_handler}
                         on_word_select={word_select_handler}/>,
                     document.getElementById('page-content'));
   } else {

@@ -13,7 +13,7 @@ import LLWordData from '../models/WordData';
 
 export interface LLWordProps {
   word: LLWordData;
-  on_resolve_keys: (keys: string[]) => Map<string, string>;
+  on_resolve_aliases: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
 }
  
@@ -44,7 +44,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
           {alias}
         </LLTitle>
         <LLNative
-              on_resolve_keys={this.props.on_resolve_keys}
+              on_resolve_aliases={this.props.on_resolve_aliases}
               on_word_select={this.props.on_word_select}
               data={this.state.word.get_natives()}/>
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
