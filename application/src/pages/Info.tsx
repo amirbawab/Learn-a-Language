@@ -15,16 +15,6 @@ class LLInfo extends React.Component<LLInfoProps, LLInfoState> {
         <div className="row">
           <div className="col-lg-12">
             <LLBasicCard>
-              <b>How to use this app?</b>
-              <p>Start by cloning and installing dependencies:</p>
-              <code><pre>{`
-git clone https://github.com/amirbawab/learn-a-language
-cd learn-a-language/
-npm install
-npm run application
-`}
-              </pre></code>
-              <hr/>
               <b>How to add a new Word?</b>
               <p>Create a new JSON file and place it inside the <code>data/</code> directory located at the root of this project. 
                  <u>The page should automatically update.</u></p>
