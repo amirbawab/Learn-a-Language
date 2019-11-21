@@ -36,7 +36,7 @@ function json_to_typescript(words) {
 }
 
 function create_static_data(content) {
-  const STATIC_DATA_DIR = "./src/data/";
+  const STATIC_DATA_DIR = "./src/db/";
   const TEMPLATE_FILE = STATIC_DATA_DIR + "StaticData.template.tsx";
   const DESTINATION_FILE = STATIC_DATA_DIR + "StaticData.tsx";
 

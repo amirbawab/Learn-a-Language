@@ -9,7 +9,7 @@ import LLFlashcard from './pages/Flashcard';
 import LLNotification from './pages/Notification';
 import LLWordData from './models/WordData';
 import {shuffle} from './Common';
-import StaticData from './data/StaticData';
+import StaticData from './db/StaticData';
 
 var static_data = new StaticData();
 static_data.init_data();
