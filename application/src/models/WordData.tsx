@@ -6,7 +6,12 @@ class LLWordData {
   private pronunciations: LLSoundData[] = [];
   private examples: LLExampleData[] = [];
   private natives: string[] = [];
-  constructor(private word: string) {}
+  private word: string;
+  private alias: string;
+  constructor(word: string, alias: string = "") {
+    this.word = word;
+    this.alias = alias.match("^\\w+$") ? alias : "";
+  }
   public add_pronunciation(language: string, sound: string) {
     this.pronunciations.push(new LLSoundData(language, sound));
   }
@@ -28,8 +33,8 @@ class LLWordData {
   public get_word() {
     return this.word;
   }
-  public set_word(word: string) {
-    this.word = word;
+  public get_alias() {
+    return this.alias;
   }
   public get_md5() {
     return md5(this.get_word());
@@ -44,8 +49,7 @@ class LLWordData {
     return this.natives;
   }
   public static from_json(json: any) {
-    let word_data = new LLWordData(json.word);
-
+    let word_data = new LLWordData(json.word, json.alias);
     json.native_form.forEach((val: string) => {
       word_data.add_native(val);
     });
@@ -59,12 +63,12 @@ class LLWordData {
       });
       word_data.add_example(example);
     });
-    
     return word_data;
   }
   public to_json() {
     let json : any = {};
     json.word = this.word;
+    json.alias = this.alias;
     json.native_form = [];
     this.natives.forEach((val: string) => {
       json.native_form.push(val);

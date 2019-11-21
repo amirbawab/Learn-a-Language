@@ -25,16 +25,23 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
   }
 
   render() {
-
+    let alias = undefined;
+    if(this.state.word.get_alias() !== "") {
+      alias = (
+        <div>
+          <small style={{fontSize:15}}className="text-secondary">
+            <em>alias: {this.state.word.get_alias()}</em>
+          </small>
+        </div>
+      );
+    }
     return (
       <div className="m-2">
         <LLTitle>
           <div>
             <i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b>
           </div>
-          <div>
-            <small style={{fontSize:15}}className="text-secondary"><em>key: {this.state.word.get_md5()}</em></small>
-          </div>
+          {alias}
         </LLTitle>
         <LLNative
               on_resolve_keys={this.props.on_resolve_keys}

@@ -25,7 +25,7 @@ class LLStaticData {
   }
   init_data() {
     
-      this.add_word(LLWordData.from_json({"word":"Tea","native_form":["茶"],"example":[],"pronunciation":[{"language":"English","sound":"Chai"}]}));
+      this.add_word(LLWordData.from_json({"word":"Tea","alias":"tea","native_form":["茶"],"example":[],"pronunciation":[{"language":"English","sound":"Chai"}]}));
     
   }
 }
