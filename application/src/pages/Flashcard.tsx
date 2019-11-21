@@ -10,7 +10,7 @@ import LLNative from './sections/Native';
 export interface LLFlashcardProps {
   words_keys: string[];
   on_show_word: (word: string, callback: (word: LLWordData) => void) => void;
-  on_resolve_keys: (keys: string[]) => Map<string, string>;
+  on_resolve_aliases: (keys: string[]) => Map<string, string>;
   on_word_select: (word: string) => void;
 }
 export interface LLFlashcardState {}
@@ -102,34 +102,18 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       if(!this.state.hide_native) {
         native_section = (
           <LLNative
-                read_only={true}
-                on_resolve_keys={this.props.on_resolve_keys}
-                on_add={() => {}} 
-                on_delete={() => {}} 
+                on_resolve_aliases={this.props.on_resolve_aliases}
                 on_word_select={this.props.on_word_select}
                 data={this.state.word.get_natives()}/>
         );
       }
 
       if(!this.state.hide_pronunciation) {
-        pronunciation_section = (
-          <LLPronunciation  
-                read_only={true}
-                on_add={() => {}} 
-                on_delete={() => {}} 
-                data={this.state.word.get_pronunciations()}/>
-        ); 
+        pronunciation_section = <LLPronunciation data={this.state.word.get_pronunciations()}/>; 
       }
 
       if(!this.state.hide_example) {
-        example_section = (
-          <LLExample 
-                read_only={true}
-                on_add={() => {}}
-                on_delete={() => {}}
-                on_example_update={() => {}}
-                data={this.state.word.get_examples()}/>
-        );
+        example_section = <LLExample data={this.state.word.get_examples()}/>;
       }
 
       main_page = (

@@ -1,22 +1,32 @@
 import LLWordData from '../models/WordData';
-import {md5, words_t} from '../Common';
 
 class LLStaticData {
-  private words: words_t = new Map<string, LLWordData>();
+  private word_key_map = new Map<string, LLWordData>();
+  private word_alias_map = new Map<string, LLWordData>();
   get_words() {
-    return this.words;
+    return this.word_key_map;
   }
   get_word(word: string) {
-    return this.get_word_by_key(md5(word));
+    let dummy = new LLWordData(word, undefined);
+    return this.get_word_by_key(dummy.get_key());
   }
   get_word_by_key(key: string) {
-    if(this.words.has(key)) {
-      return this.words.get(key)!;
+    if(this.word_key_map.has(key)) {
+      return this.word_key_map.get(key)!;
     }
     return null;
   }
-  add_word(word: LLWordData) {
-    this.words.set(word.get_md5(), word);
+  get_word_by_alias(alias: string) {
+    if(this.word_alias_map.has(alias)) {
+      return this.word_alias_map.get(alias)!;
+    }
+    return null;
+  }
+  private add_word(word: LLWordData) {
+    this.word_key_map.set(word.get_key(), word);
+    if(word.get_alias() !== "") {
+      this.word_alias_map.set(word.get_alias(), word);
+    }
   }
   init_data() {
     /* STATIC DATA */

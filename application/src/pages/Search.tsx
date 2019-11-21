@@ -1,14 +1,9 @@
 import * as React from 'react';
-import {LLOkCancelForm} from '../components/Form';
-import {LLLabelInput} from '../components/Input';
 import LLWordData from '../models/WordData';
 
 export interface LLSearchProps {
-  read_only: boolean;
   on_word_select: (word: string) => void;
-  on_new_word: (word: string) => void;
   on_flashcard: () => void;
-  on_server_update: (url: string, port: string) => void;
   words: LLWordData[];
 }
  
@@ -16,27 +11,9 @@ export interface LLSearchState {}
  
 class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   state = {
-    new_word_form_hidden: true,
-    server_form_hidden: true,
     search_text: "",
-    server_url_text: "http://localhost",
-    server_port_text: "3001"
   }
 
-  set_new_word_form_hidden(e: any, is_hidden : boolean) {
-    if(e !== null) {
-      e.preventDefault();
-    }
-    this.setState({'new_word_form_hidden': is_hidden});
-  }
-
-  set_server_form_hidden(e: any, is_hidden : boolean) {
-    if(e !== null) {
-      e.preventDefault();
-    }
-    this.setState({'server_form_hidden': is_hidden});
-  }
-  
   flashcard_mode(e: any) {
     e.preventDefault();
     this.props.on_flashcard();
@@ -47,25 +24,9 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
     this.props.on_word_select(word.get_word());
   }
 
-  on_new_word() {
-    let input = this.refs.new_word as LLLabelInput;
-    this.props.on_new_word(input.value());
-    this.set_new_word_form_hidden(null, true);
-  }
-
   on_search_change() {
     let input = this.refs.search as HTMLInputElement;
     this.setState({search_text: input.value});
-  }
-
-  on_server_update() {
-    let url_input = this.refs.url as LLLabelInput;
-    let port_input = this.refs.port as LLLabelInput;
-    this.setState({
-      server_url_text: url_input.value(),
-      server_port_text: port_input.value()
-    });
-    this.props.on_server_update(url_input.value(), port_input.value());
   }
 
   search_includes(word_data: LLWordData) {
@@ -92,51 +53,6 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   }
 
   render() { 
-    let new_word_form = undefined;
-    if(!this.state.new_word_form_hidden && !this.props.read_only) {
-      new_word_form = (
-        <div className="small col-md-12 text-white">
-          <LLOkCancelForm 
-              ok_name="Add" 
-              cancel_name="Close" 
-              on_ok={() => this.on_new_word()} 
-              on_cancel={() => this.set_new_word_form_hidden(null, true)}>
-            <LLLabelInput ref="new_word" label="Word"/>
-          </LLOkCancelForm>
-        </div>
-      );
-    }
-
-    let new_word_button = undefined;
-    if(!this.props.read_only) {
-      new_word_button = (
-        <React.Fragment>
-          <hr className="sidebar-divider my-0" />
-          <li className="nav-item">
-            <a className="nav-link" href="#/" onClick={(e) => {this.set_new_word_form_hidden(e, false)}}>
-              <i className="fas fa-plus-square"></i> New Word
-            </a>
-          </li>
-        </React.Fragment>
-      );
-    }
-
-    let server_form = undefined;
-    if(!this.state.server_form_hidden) {
-      server_form = (
-        <div className="small col-md-12 text-white">
-          <LLOkCancelForm 
-              ok_name="Update" 
-              cancel_name="Close" 
-              on_ok={() => this.on_server_update()} 
-              on_cancel={() => this.set_server_form_hidden(null, true)}>
-            <LLLabelInput ref="url" label="URL" text={this.state.server_url_text}/>
-            <LLLabelInput ref="port" label="Port" text={this.state.server_port_text}/>
-          </LLOkCancelForm>
-        </div>
-      );
-    }
-
     return (
       <div>
         <form 
@@ -160,21 +76,10 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
         <hr className="sidebar-divider my-0" />
         <li className="nav-item">
-          <a className="nav-link" href="#/" onClick={(e) => {this.set_server_form_hidden(e, false)}}>
-            <i className="fas fa-server"></i> Server
-          </a>
-        </li>
-        {server_form}
-
-        <hr className="sidebar-divider my-0" />
-        <li className="nav-item">
           <a className="nav-link" href="#/" onClick={(e) => {this.flashcard_mode(e)}}>
             <i className="fas fa-comment-alt"></i> Flashcard <small><em>({this.props.words.length})</em></small>
           </a>
         </li>
-
-        {new_word_button}
-        {new_word_form}
 
         <hr className="sidebar-divider my-0" />
         <div style={{height: "350px"}}>
