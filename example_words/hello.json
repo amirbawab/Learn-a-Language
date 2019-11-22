@@ -2,11 +2,11 @@
   "word":"Hello",
   "alias":"hello",
   "native_form":["你好", "#you #good"],
-  "example":[],
   "pronunciation":[
     {
       "language":"French/English",
       "sound":"ni hao"
     }
-  ]
+  ],
+  "example":[]
 }

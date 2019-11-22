@@ -60,18 +60,18 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
     return false;
   }
 
-  show_native() {
-    this.setState({hide_native: false});
+  toggle_native() {
+    this.setState({hide_native: !this.state.hide_native});
     return false;
   }
 
-  show_pronunciation() {
-    this.setState({hide_pronunciation: false});
+  toggle_pronunciation() {
+    this.setState({hide_pronunciation: !this.state.hide_pronunciation});
     return false;
   }
   
-  show_example() {
-    this.setState({hide_example: false});
+  toggle_example() {
+    this.setState({hide_example: !this.state.hide_example});
     return false;
   }
 
@@ -125,8 +125,8 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
                   theme="info" 
                   icon="fas fa-eye" 
                   extra_class={this.state.word.get_natives().length === 0 ? "disabled" : ""}
-                  on_click={() => this.show_native()}>
-                Show Native Form
+                  on_click={() => this.toggle_native()}>
+                {this.state.hide_native ? "Show" : "Hide"} Native Form
               </LLSplitButton>
             </div>
           </div>
@@ -138,8 +138,8 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
                   theme="success" 
                   icon="fas fa-eye" 
                   extra_class={this.state.word.get_pronunciations().length === 0 ? "disabled" : ""}
-                  on_click={() => this.show_pronunciation()}>
-                Show Pronunciation
+                  on_click={() => this.toggle_pronunciation()}>
+                {this.state.hide_pronunciation ? "Show" : "Hide"} Pronunciation
               </LLSplitButton>
             </div>
           </div>
@@ -151,8 +151,8 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
                   theme="primary" 
                   icon="fas fa-eye" 
                   extra_class={this.state.word.get_examples().length === 0 ? "disabled" : ""}
-                  on_click={() => this.show_example()}>
-                Show Example
+                  on_click={() => this.toggle_example()}>
+                {this.state.hide_example ? "Show" : "Hide"} Example
               </LLSplitButton>
             </div>
           </div>
@@ -165,7 +165,7 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       <div className="m-2">
         <LLTitle><i className="far afa-file-word"></i> <b>Flashcard</b></LLTitle>
         <div className="row">
-          <div className="col-md-4 mb-4">
+          <div className="col-md-2 mb-4 text-center">
             <LLSplitButton 
                 theme="secondary" 
                 icon="fas fa-arrow-left" 
@@ -174,14 +174,14 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
               Previous
             </LLSplitButton>
           </div>
-          <div className="col-md-4 mb-4 text-center">
+          <div className="col-md-8 mb-4 text-center">
             {
               (this.index >= 0) ? 
               (this.index+1 + " / " + this.props.words_keys.length) : 
               "Total words: " + this.props.words_keys.length
             }
           </div>
-          <div className="col-md-4 mb-4 text-right">
+          <div className="col-md-2 mb-4 text-center">
             <LLSplitButton 
                 theme="secondary" 
                 icon="fas fa-arrow-right" 

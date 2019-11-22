@@ -2,11 +2,21 @@
   "word":"Good",
   "alias":"good",
   "native_form":["好"],
-  "example":[],
   "pronunciation":[
     {
       "language":"English",
       "sound":"hao"
+    }
+  ],
+  "example":[
+    {
+      "sentence":"I am very good",
+      "pronunciation":[
+        {
+          "language":"English",
+          "sound":"wo hen hao"
+        }
+      ]
     }
   ]
 }

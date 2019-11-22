@@ -57,19 +57,27 @@ class LLWordData {
   }
   public static from_json(json: any) {
     let word_data = new LLWordData(json.word, json.alias);
-    json.native_form.forEach((val: string) => {
-      word_data.add_native(val);
-    });
-    json.pronunciation.forEach((val: any) => {
-      word_data.add_pronunciation(val.language, val.sound);
-    });
-    json.example.forEach((val: any) => {
-      let example = new LLExampleData(val.sentence);
-      val.pronunciation.forEach((pval: any) => {
-        example.add_sound(pval.language, pval.sound);
+    if(json.native_form) {
+      json.native_form.forEach((val: string) => {
+        word_data.add_native(val);
       });
-      word_data.add_example(example);
-    });
+    }
+    if(json.pronunciation) {
+      json.pronunciation.forEach((val: any) => {
+        word_data.add_pronunciation(val.language, val.sound);
+      });
+    }
+    if(json.example) {
+      json.example.forEach((val: any) => {
+        let example = new LLExampleData(val.sentence);
+        if(val.pronunciation) {
+          val.pronunciation.forEach((pval: any) => {
+            example.add_sound(pval.language, pval.sound);
+          });
+        }
+        word_data.add_example(example);
+      });
+    }
     return word_data;
   }
   public to_json() {

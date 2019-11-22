@@ -2,11 +2,11 @@
   "word":"You",
   "alias":"you",
   "native_form":["你"],
-  "example":[],
   "pronunciation":[
     {
       "language":"French",
       "sound":"ni"
     }
-  ]
+  ],
+  "example":[]
 }

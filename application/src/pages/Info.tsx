@@ -16,7 +16,17 @@ class LLInfo extends React.Component<LLInfoProps, LLInfoState> {
           <div className="col-lg-12">
             <LLBasicCard>
               <section>
-                <h4>How to use this application</h4>
+                <h4>How to use this platform?</h4>
+                <div>
+                  <ul>
+                    <li>Click on "Flashcard" to review all the words in a shuffled order</li>
+                    <li>Learn about a particular word by searching for it then selecting it</li>
+                  </ul>
+                </div>
+              </section>
+              <hr/>
+              <section>
+                <h4>How to copy this platform to learn my language?</h4>
                 <div>
                   <ul>
                     <li>Create a new repository: <code>my-language</code></li>
