@@ -1,7 +1,4 @@
 # Learn a Language
 
-## Live Demo
-[Demo Link](https://amirbawab.github.io/Learn-a-Language/)  
-
-## Usage
-Instruction available in the demo
+## Live Demo and Usage Instructions
+[Demo and Usage Link](https://amirbawab.github.io/Learn-a-Language/)  
