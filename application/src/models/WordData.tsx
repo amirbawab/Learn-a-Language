@@ -8,6 +8,7 @@ class LLWordData {
   private natives: string[] = [];
   private word: string;
   private alias: string;
+  private referenced_by: LLWordData[] = [];
   constructor(word: string, alias: string = "") {
     this.word = word;
     this.alias = alias.match("^\\w+$") ? alias : "";
@@ -47,6 +48,12 @@ class LLWordData {
   }
   public get_natives() {
     return this.natives;
+  }
+  public add_referenced_by(word: LLWordData) {
+    this.referenced_by.push(word);
+  }
+  public get_referenced_by() {
+    return this.referenced_by;
   }
   public static from_json(json: any) {
     let word_data = new LLWordData(json.word, json.alias);

@@ -28,8 +28,25 @@ class LLStaticData {
       this.word_alias_map.set(word.get_alias(), word);
     }
   }
+  private connect_words() {
+    this.word_key_map.forEach((word_1: LLWordData) => {
+      let alias = word_1.get_alias();
+      if(alias !== "") {
+        this.word_key_map.forEach((word_2: LLWordData) => {
+          let natives = word_2.get_natives();
+          for(let nid in natives) {
+            if(natives[nid].includes("#" + alias)) {
+              word_1.add_referenced_by(word_2);
+              break;
+            }
+          }
+        });
+      }
+    })
+  }
   init_data() {
     /* STATIC DATA */
+    this.connect_words();
   }
 }
 

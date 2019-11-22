@@ -7,6 +7,7 @@ import LLTitle from '../components/Title';
 import LLPronunciation from './sections/Pronunciation';
 import LLExample from './sections/Example';
 import LLNative from './sections/Native';
+import LLReference from './sections/Reference';
 
 // Models
 import LLWordData from '../models/WordData';
@@ -21,7 +22,7 @@ export interface LLWordState {}
  
 class LLWord extends React.Component<LLWordProps, LLWordState> {
   state = {
-    word: this.props.word.clone(),
+    word: this.props.word,
   }
 
   render() {
@@ -49,6 +50,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               data={this.state.word.get_natives()}/>
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
         <LLExample data={this.state.word.get_examples()}/>
+        <LLReference on_word_select={this.props.on_word_select} word={this.state.word}/>
       </div>
     );
   }
