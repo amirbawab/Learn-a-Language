@@ -28,6 +28,7 @@ class LLInfo extends React.Component<LLInfoProps, LLInfoState> {
                     <li>Open your browser at <a href="http://localhost:3000/">http://localhost:3000/</a></li>
                     <li><a href="#add-word">Add new words</a> into the <code>data</code> directory</li>
                     <li>Upon create or save, the application should automatically refresh</li>
+                    <li>[Optional] <a href="#publish">Publish to Github pages</a></li>
                   </ul>
                 </div>
               </section>
@@ -68,11 +69,49 @@ class LLInfo extends React.Component<LLInfoProps, LLInfoState> {
                   the word you would like to reference. (e.g. <code>#tea</code>)
                 </div>
               </section>
-              <section>
+              <hr/>
+              <section id="publish">
                 <h4>Publish to Github pages</h4>
                 <div>
                   <ul>
+                    <li>Go to Account Settings > Developer Settings > Personal access token</li>
+                    <li>Generate a new token with access scope: <code>repo</code> and <code>workflow</code></li>
+                    <li>Copy the generated token</li>
+                    <li>Go to Repository Settings > Secrets</li>
+                    <li>Add a new secret named <code>ACCESS_TOKEN</code> and paste the token as its value</li>
                     <li>Create github worflows directory: <code>mkdir -p .github/workflows/</code></li>
+                    <li>In the created directory, add a new worflow <code>ghpages.yml</code><br/>
+                      <code style={{display: "block", whiteSpace: "pre-wrap"}}>
+ {`
+name: gh-pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+    - name: Build and Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v2
+      env:
+        ACCESS_TOKEN: $\{{ secrets.ACCESS_TOKEN }}
+        BASE_BRANCH: master
+        BRANCH: gh-pages
+        FOLDER: 'build'
+        BUILD_SCRIPT: git submodule update --init --recursive && npm install --prefix Learn-a-Language/application && LL_DATA_DIR="$PWD/data" npm run build --prefix Learn-a-Language/application && mv Learn-a-Language/application/build ./build
+`}
+                      </code>
+                    </li>
+                    <li>Make sure that your word JSON files are located inside the <code>data </code> 
+                        directory. If you decided to name it something else make sure to update the
+                        <code> BUILD_SCRIPT</code> attribute in the above code</li>
+                    <li>Now every <code>git push</code> will rebuild the website with your new words</li>
+                    <li>Visit <code>USERNAME.github.io/my-language</code> to view the website</li>
                   </ul>
                 </div>
               </section>
