@@ -30,14 +30,11 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   }
 
   search_includes(word_data: LLWordData) {
-    let word = word_data.get_word();
-    let search_text = this.state.search_text;
+    let word = word_data.get_word().toLowerCase();
+    let search_text = this.state.search_text.toLowerCase();
     if(search_text.length > word.length) {
       return false;
     }
-
-    // Ignore case sensitivity
-    search_text = search_text.toLowerCase();
 
     // Letters in the search field must exist
     // in the target 'word' and in the same order
