@@ -7,6 +7,7 @@ const fs = require('fs');
 const md5 = require('md5');
 const watch = require('watch');
 const yargs = require('yargs');
+const path = require('path');
 
 function read_data(data_dir) {
   let words = [];
@@ -71,8 +72,13 @@ function compile(data_dir, should_watch, callback) {
     description: 'Watch for data changes'
   })
 
-  compile("./data", yargs.argv.watch, (data_dir) => {
-    console.log(">> Compiling JSON files into static data ...");
+  let json_dir = path.resolve(`${__dirname}/../example_words/`);
+  if(process.env.LL_DATA_DIR) {
+    json_dir = process.env.LL_DATA_DIR;
+  }
+
+  compile(json_dir, yargs.argv.watch, (data_dir) => {
+    console.log(">> Compiling JSON files at '" + data_dir + "' into static data ...");
     let json_data = read_data(data_dir);
     let ts_content = json_to_typescript(json_data);
     create_static_data(ts_content);
