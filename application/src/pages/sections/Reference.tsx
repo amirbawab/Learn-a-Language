@@ -20,8 +20,8 @@ class LLReference extends React.Component<LLReferenceProps, LLReferenceState> {
           <div className="row">
             <div className="col-lg-12">
               <LLBasicCard title="Reference By">
-                {this.props.word.get_referenced_by().map((val) => {
-                  return <li><a href="#/" onClick={(e) => this.word_select(e, val)}>{val.get_word()}</a></li>;
+                {this.props.word.get_referenced_by().map((val, id) => {
+                  return <li key={id}><a href="#/" onClick={(e) => this.word_select(e, val)}>{val.get_word()}</a></li>;
                 })}
               </LLBasicCard>
             </div>

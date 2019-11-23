@@ -15,12 +15,17 @@ function read_data(data_dir) {
     let files = fs.readdirSync(data_dir);
     files.forEach(file => {
       if(file.endsWith(".json")) {
-        let file_data = JSON.parse(fs.readFileSync(data_dir + "/" + file));
-        words.push(file_data);
+        console.log("  - Parsing file:", file)
+        try {
+          let file_data = JSON.parse(fs.readFileSync(data_dir + "/" + file));
+          words.push(file_data);
+        } catch(e) {
+          console.log("  X Failed to parse file:", file);
+        }
       }
     });
   } else {
-    console.error("Path " + data_dir + " not found!");
+    console.log("Path " + data_dir + " not found!");
     process.exit(1);
   }
   return words;

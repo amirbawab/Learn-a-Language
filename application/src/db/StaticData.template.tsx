@@ -25,6 +25,9 @@ class LLStaticData {
   private add_word(word: LLWordData) {
     this.word_key_map.set(word.get_key(), word);
     if(word.get_alias() !== "") {
+      if(this.word_alias_map.has(word.get_alias())) {
+        console.warn("Duplicate alias", word.get_alias());
+      }
       this.word_alias_map.set(word.get_alias(), word);
     }
   }
