@@ -113,9 +113,11 @@ function render_word_panel(word: string) {
 }
 
 function render_search_panel() {
-  let words = static_data.get_words();
+  let values = Array.from(static_data.get_words().values()).sort(function (a, b) {
+    return a.get_word().toLowerCase().localeCompare(b.get_word().toLowerCase());
+  });
   ReactDOM.render(<LLSearch 
-                      words={Array.from(words.values())} 
+                      words={values} 
                       on_word_select={word_select_handler} 
                       on_flashcard={flashcard_handler}/>,
                   document.getElementById('search-panel'));
