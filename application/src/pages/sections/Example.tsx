@@ -24,7 +24,7 @@ class LLExample extends React.Component<LLExampleProps, LLExampleState> {
                     <div>{example.get_sounds().map((sound, sound_id) => {
                       return (
                         <div key={sound_id}>
-                          <span className="text-primary mr-2">[{sound.get_language()} Pronunciation]</span>
+                          <small className="text-primary mr-2"><b>[{sound.get_language().toUpperCase()} PRONUNCIATION]</b></small>
                           <span>{sound.get_sound()}</span>
                         </div>
                       );
