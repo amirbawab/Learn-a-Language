@@ -4,13 +4,13 @@ import {LLBorderCard} from '../../components/Card';
 export interface LLNativeProps {
   data: string[];
   on_resolve_aliases: (array: string[]) => Map<string, string>;
-  on_word_select: (word: string) => void;
+  on_alias_select: (word: string) => void;
 }
 export interface LLNativeState {}
 class LLNative extends React.Component<LLNativeProps, LLNativeState> {
-  on_word_select(e: any, word: string) {
+  on_alias_select(e: any, alias: string) {
     e.preventDefault();
-    this.props.on_word_select(word);
+    this.props.on_alias_select(alias);
   }
   resolve_aliases(val: string) {
     let regex = /(#\w+)/g;
@@ -38,12 +38,12 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
       html = (
         <React.Fragment>
           {split.map((part: string, id) => {
-            let slice: string;
-            if(part.startsWith("#") && result.has(slice = part.slice(1))) {
-              let word_of_key = String(result.get(slice));
+            let alias: string;
+            if(part.startsWith("#") && result.has(alias = part.slice(1))) {
+              let word_of_key = String(result.get(alias));
               return <a 
                   key={id} 
-                  onClick={(e) => this.on_word_select(e, word_of_key)} 
+                  onClick={(e) => this.on_alias_select(e, alias)} 
                   href="#/">{word_of_key}</a>
             }
             return <React.Fragment key={id}>{part}</React.Fragment>

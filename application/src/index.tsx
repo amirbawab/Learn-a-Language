@@ -62,16 +62,23 @@ function resolve_aliases_handler(aliases: string[]) {
   return result;
 }
 
-function flashcard_word_select_handler(word: string) {
-  render_notification({
-    theme: "warning", 
-    hidden: false, 
-    text: "Click on 'Visit Word' to exist flashcard exercise and show word '" + word + "' in regular mode", 
-    button: "Visit Word", 
-    on_button_click: () => {
-      render_word_panel(word);
-    }
-  });
+function flashcard_alias_select_handler(alias: string) {
+  let word = static_data.get_word_by_alias(alias);
+  if(word !== null) {
+    render_notification({
+      theme: "warning", 
+      hidden: false, 
+      text: "Click on 'Visit Word' to exist flashcard exercise and show word of alias '" + alias + "' in regular mode", 
+      button: "Visit Word", 
+      on_button_click: () => {
+        render_word_panel(word!.get_word());
+      }
+    });
+  }
+}
+
+function word_from_alias_handler(alias: string) {
+  return static_data.get_word_by_alias(alias);
 }
 
 /**
@@ -93,7 +100,7 @@ function render_flashcard_panel() {
   shuffle(words_keys);
   ReactDOM.render(<LLFlashcard
     words_keys={words_keys}
-    on_word_select={flashcard_word_select_handler}
+    on_alias_select={flashcard_alias_select_handler}
     on_resolve_aliases={resolve_aliases_handler}
     on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
 }
@@ -105,7 +112,8 @@ function render_word_panel(word: string) {
                         key={word_data.get_word()}
                         word={word_data} 
                         on_resolve_aliases={resolve_aliases_handler}
-                        on_word_select={word_select_handler}/>,
+                        on_word_select={word_select_handler}
+                        word_from_alias={word_from_alias_handler}/>,
                     document.getElementById('page-content'));
   } else {
     error_notification("Failed to load word '" + word + "'");

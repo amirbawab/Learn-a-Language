@@ -15,14 +15,26 @@ import LLWordData from '../models/WordData';
 export interface LLWordProps {
   word: LLWordData;
   on_resolve_aliases: (keys: string[]) => Map<string, string>;
-  on_word_select: (word: string) => void;
+  on_word_select: (alias: string) => void;
+  word_from_alias: (alias: string) => LLWordData | null;
 }
  
 export interface LLWordState {}
  
 class LLWord extends React.Component<LLWordProps, LLWordState> {
-  state = {
+  state : {
+    word: LLWordData,
+    sub_word: LLWordData | null
+  } = {
     word: this.props.word,
+    sub_word: null
+  }
+
+  alias_select(alias: string) {
+    let sub_word = this.props.word_from_alias(alias);
+    if(sub_word !== null) {
+      this.setState({sub_word: sub_word});
+    }
   }
 
   render() {
@@ -36,6 +48,24 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </div>
       );
     }
+    let sub_word = undefined;
+    if(this.state.sub_word !== null) {
+      sub_word = (
+        <div className="border border-warning mb-4">
+          <div className="row">
+            <div className="col-md-12 text-center m-2">
+              <span onClick={() => {this.setState({sub_word: null})}}><i className="fas fa-times"></i> Close</span>
+            </div>
+          </div>
+          <LLWord 
+              key={this.state.sub_word.get_key()}
+              word={this.state.sub_word!} 
+              on_resolve_aliases={this.props.on_resolve_aliases} 
+              on_word_select={this.props.on_word_select} 
+              word_from_alias={this.props.word_from_alias} />
+        </div>
+      )
+    }
     return (
       <div className="m-2">
         <LLTitle>
@@ -46,8 +76,9 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </LLTitle>
         <LLNative
               on_resolve_aliases={this.props.on_resolve_aliases}
-              on_word_select={this.props.on_word_select}
+              on_alias_select={(alias: string) => this.alias_select(alias)}
               data={this.state.word.get_natives()}/>
+        {sub_word}
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
         <LLExample data={this.state.word.get_examples()}/>
         <LLReference on_word_select={this.props.on_word_select} word={this.state.word}/>
