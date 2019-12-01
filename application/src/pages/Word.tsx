@@ -37,6 +37,16 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     }
   }
 
+  close_sub_word(e: any) {
+    e.preventDefault();
+    this.setState({sub_word: null})
+  }
+
+  open_sub_word(e: any) {
+    e.preventDefault();
+    this.props.on_word_select(this.state.sub_word!.get_word());
+  }
+
   render() {
     let alias = undefined;
     if(this.state.word.get_alias() !== "") {
@@ -53,8 +63,11 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
       sub_word = (
         <div className="border border-warning mb-4">
           <div className="row">
-            <div className="col-md-12 text-center m-2">
-              <span onClick={() => {this.setState({sub_word: null})}}><i className="fas fa-times"></i> Close</span>
+            <div className="col-md-6 text-center">
+              <a href="#/" onClick={(e) => this.open_sub_word(e)}><i className="far fa-file-word m-2"></i>Open</a>
+            </div>
+            <div className="col-md-6 text-center">
+              <a href="#/" onClick={(e) => this.close_sub_word(e)}><i className="fas fa-times m-2"></i>Close</a>
             </div>
           </div>
           <LLWord 
