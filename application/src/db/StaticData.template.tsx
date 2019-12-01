@@ -38,7 +38,7 @@ class LLStaticData {
         this.word_key_map.forEach((word_2: LLWordData) => {
           let natives = word_2.get_natives();
           for(let nid in natives) {
-            if(natives[nid].includes("#" + alias)) {
+            if((new RegExp("#"+alias+"\b")).test(natives[nid])) {
               word_1.add_referenced_by(word_2);
               break;
             }
