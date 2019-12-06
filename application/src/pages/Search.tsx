@@ -2,7 +2,7 @@ import * as React from 'react';
 import LLWordData from '../models/WordData';
 
 export interface LLSearchProps {
-  on_word_select: (word: string) => void;
+  on_word_select: (key: string) => void;
   on_flashcard: () => void;
   words: LLWordData[];
 }
@@ -21,7 +21,7 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
   word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_word_select(word.get_word());
+    this.props.on_word_select(word.get_key());
   }
 
   on_search_change() {

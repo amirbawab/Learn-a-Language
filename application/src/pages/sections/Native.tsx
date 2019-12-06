@@ -3,7 +3,7 @@ import {LLBorderCard} from '../../components/Card';
 
 export interface LLNativeProps {
   data: string[];
-  on_resolve_aliases: (array: string[]) => Map<string, string>;
+  on_resolve_aliases: (aliases: string[]) => Map<string, string>;
   on_alias_select: (word: string) => void;
 }
 export interface LLNativeState {}

@@ -14,8 +14,8 @@ import LLWordData from '../models/WordData';
 
 export interface LLWordProps {
   word: LLWordData;
-  on_resolve_aliases: (keys: string[]) => Map<string, string>;
-  on_word_select: (alias: string) => void;
+  on_resolve_aliases: (aliases: string[]) => Map<string, string>;
+  on_word_select: (key: string) => void;
   word_from_alias: (alias: string) => LLWordData | null;
 }
  
@@ -24,27 +24,27 @@ export interface LLWordState {}
 class LLWord extends React.Component<LLWordProps, LLWordState> {
   state : {
     word: LLWordData,
-    sub_word: LLWordData | null
+    native_sub_word: LLWordData | null
   } = {
     word: this.props.word,
-    sub_word: null
+    native_sub_word: null
   }
 
   alias_select(alias: string) {
-    let sub_word = this.props.word_from_alias(alias);
-    if(sub_word !== null) {
-      this.setState({sub_word: sub_word});
+    let native_sub_word = this.props.word_from_alias(alias);
+    if(native_sub_word !== null) {
+      this.setState({native_sub_word: native_sub_word});
     }
   }
 
-  close_sub_word(e: any) {
+  close_native_sub_word(e: any) {
     e.preventDefault();
-    this.setState({sub_word: null})
+    this.setState({native_sub_word: null})
   }
 
-  open_sub_word(e: any) {
+  open_native_sub_word(e: any) {
     e.preventDefault();
-    this.props.on_word_select(this.state.sub_word!.get_word());
+    this.props.on_word_select(this.state.native_sub_word!.get_key());
   }
 
   render() {
@@ -58,21 +58,21 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </div>
       );
     }
-    let sub_word = undefined;
-    if(this.state.sub_word !== null) {
-      sub_word = (
+    let native_sub_word = undefined;
+    if(this.state.native_sub_word !== null) {
+      native_sub_word = (
         <div className="border border-warning mb-4">
           <div className="row">
             <div className="col-md-6 text-center">
-              <a href="#/" onClick={(e) => this.open_sub_word(e)}><i className="far fa-file-word m-2"></i>Open</a>
+              <a href="#/" onClick={(e) => this.open_native_sub_word(e)}><i className="far fa-file-word m-2"></i>Open</a>
             </div>
             <div className="col-md-6 text-center">
-              <a href="#/" onClick={(e) => this.close_sub_word(e)}><i className="fas fa-times m-2"></i>Close</a>
+              <a href="#/" onClick={(e) => this.close_native_sub_word(e)}><i className="fas fa-times m-2"></i>Close</a>
             </div>
           </div>
           <LLWord 
-              key={this.state.sub_word.get_key()}
-              word={this.state.sub_word!} 
+              key={this.state.native_sub_word.get_key()}
+              word={this.state.native_sub_word!} 
               on_resolve_aliases={this.props.on_resolve_aliases} 
               on_word_select={this.props.on_word_select} 
               word_from_alias={this.props.word_from_alias} />
@@ -91,7 +91,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               on_resolve_aliases={this.props.on_resolve_aliases}
               on_alias_select={(alias: string) => this.alias_select(alias)}
               data={this.state.word.get_natives()}/>
-        {sub_word}
+        {native_sub_word}
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
         <LLExample data={this.state.word.get_examples()}/>
         <LLReference on_word_select={this.props.on_word_select} word={this.state.word}/>

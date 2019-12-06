@@ -10,7 +10,7 @@ export interface LLReferenceState {}
 class LLReference extends React.Component<LLReferenceProps, LLReferenceState> {
   word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_word_select(word.get_word());
+    this.props.on_word_select(word.get_key());
   }
   render() {
     let referenced_by = undefined;

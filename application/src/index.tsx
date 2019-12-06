@@ -71,7 +71,7 @@ function flashcard_alias_select_handler(alias: string) {
       text: "Click on 'Visit Word' to exist flashcard exercise and show word of alias '" + alias + "' in regular mode", 
       button: "Visit Word", 
       on_button_click: () => {
-        render_word_panel(word!.get_word());
+        render_word_panel(word!.get_key());
       }
     });
   }
@@ -105,8 +105,8 @@ function render_flashcard_panel() {
     on_show_word={flashcard_show_word_handler}/> ,document.getElementById('page-content'));
 }
 
-function render_word_panel(word: string) {
-  let word_data = static_data.get_word(word);
+function render_word_panel(word_key: string) {
+  let word_data = static_data.get_word_by_key(word_key);
   if(word_data !== null) {
     ReactDOM.render(<LLWord 
                         key={word_data.get_word()}
@@ -116,7 +116,7 @@ function render_word_panel(word: string) {
                         word_from_alias={word_from_alias_handler}/>,
                     document.getElementById('page-content'));
   } else {
-    error_notification("Failed to load word '" + word + "'");
+    error_notification("Failed to load word");
   }
 }
 
