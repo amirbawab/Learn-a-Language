@@ -1,16 +1,17 @@
 import * as React from 'react';
 import {LLBorderCard} from '../../components/Card';
+import LLWordData from '../../models/WordData';
 
 export interface LLNativeProps {
   data: string[];
-  on_resolve_aliases: (aliases: string[]) => Map<string, string>;
-  on_alias_select: (word: string) => void;
+  on_resolve_aliases: (aliases: string[]) => Map<string, LLWordData>;
+  on_word_select: (word: LLWordData) => void;
 }
 export interface LLNativeState {}
 class LLNative extends React.Component<LLNativeProps, LLNativeState> {
-  on_alias_select(e: any, alias: string) {
+  on_word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_alias_select(alias);
+    this.props.on_word_select(word);
   }
   resolve_aliases(val: string) {
     let regex = /(#\w+)/g;
@@ -27,7 +28,7 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
       let result = this.props.on_resolve_aliases(alias_array);
       let regex_val = ""
       // build regex
-      result.forEach((word: string, key: string) => {
+      result.forEach((word: LLWordData, key: string) => {
         if(regex_val.length !== 0) {
           regex_val += "|";
         }
@@ -40,11 +41,11 @@ class LLNative extends React.Component<LLNativeProps, LLNativeState> {
           {split.map((part: string, id) => {
             let alias: string;
             if(part.startsWith("#") && result.has(alias = part.slice(1))) {
-              let word_of_key = String(result.get(alias));
+              let word = result.get(alias);
               return <a 
                   key={id} 
-                  onClick={(e) => this.on_alias_select(e, alias)} 
-                  href="#/">{word_of_key}</a>
+                  onClick={(e) => this.on_word_select(e, word!)} 
+                  href="#/">{word!.get_word()}</a>
             }
             return <React.Fragment key={id}>{part}</React.Fragment>
           })}

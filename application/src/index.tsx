@@ -52,29 +52,27 @@ function flashcard_show_word_handler(key: string, callback: (word: LLWordData) =
 }
 
 function resolve_aliases_handler(aliases: string[]) {
-  let result: Map<string, string> = new Map();
+  let result: Map<string, LLWordData> = new Map();
   aliases.forEach((alias: string) => {
     let word_data = static_data.get_word_by_alias(alias);
     if(word_data !== null) {
-      result.set(alias, word_data.get_word());
+      result.set(alias, word_data);
     }
   });
   return result;
 }
 
-function flashcard_alias_select_handler(alias: string) {
-  let word = static_data.get_word_by_alias(alias);
-  if(word !== null) {
-    render_notification({
-      theme: "warning", 
-      hidden: false, 
-      text: "Click on 'Visit Word' to exist flashcard exercise and show word of alias '" + alias + "' in regular mode", 
-      button: "Visit Word", 
-      on_button_click: () => {
-        render_word_panel(word!.get_key());
-      }
-    });
-  }
+function flashcard_alias_select_handler(word: LLWordData) {
+  render_notification({
+    theme: "warning", 
+    hidden: false, 
+    text: "Click on 'Visit Word' to exist flashcard exercise and show word '" + word.get_word() + "'", 
+    button: "Visit Word", 
+    on_button_click: () => {
+      render_word_panel(word!.get_key());
+      hide_notification();
+    }
+  });
 }
 
 function word_from_alias_handler(alias: string) {

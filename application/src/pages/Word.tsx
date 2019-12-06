@@ -14,7 +14,7 @@ import LLWordData from '../models/WordData';
 
 export interface LLWordProps {
   word: LLWordData;
-  on_resolve_aliases: (aliases: string[]) => Map<string, string>;
+  on_resolve_aliases: (aliases: string[]) => Map<string, LLWordData>;
   on_word_select: (key: string) => void;
   word_from_alias: (alias: string) => LLWordData | null;
 }
@@ -30,11 +30,8 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
     native_sub_word: null
   }
 
-  alias_select(alias: string) {
-    let native_sub_word = this.props.word_from_alias(alias);
-    if(native_sub_word !== null) {
-      this.setState({native_sub_word: native_sub_word});
-    }
+  alias_select(word: LLWordData) {
+    this.setState({native_sub_word: word});
   }
 
   close_native_sub_word(e: any) {
@@ -89,7 +86,7 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </LLTitle>
         <LLNative
               on_resolve_aliases={this.props.on_resolve_aliases}
-              on_alias_select={(alias: string) => this.alias_select(alias)}
+              on_word_select={(word) => this.alias_select(word)}
               data={this.state.word.get_natives()}/>
         {native_sub_word}
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
