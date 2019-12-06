@@ -4,13 +4,13 @@ import LLWordData from '../../models/WordData';
 
 export interface LLReferenceProps {
   word: LLWordData;
-  on_word_select: (word: string) => void;
+  on_word_select: (word: LLWordData) => void;
 }
 export interface LLReferenceState {}
 class LLReference extends React.Component<LLReferenceProps, LLReferenceState> {
   word_select(e: any, word: LLWordData) {
     e.preventDefault();
-    this.props.on_word_select(word.get_key());
+    this.props.on_word_select(word);
   }
   render() {
     let referenced_by = undefined;

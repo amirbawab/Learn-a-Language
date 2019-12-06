@@ -24,24 +24,64 @@ export interface LLWordState {}
 class LLWord extends React.Component<LLWordProps, LLWordState> {
   state : {
     word: LLWordData,
-    native_sub_word: LLWordData | null
+    native_sub_word: LLWordData | null,
+    ref_sub_word: LLWordData | null
   } = {
     word: this.props.word,
-    native_sub_word: null
+    native_sub_word: null,
+    ref_sub_word: null,
   }
 
   alias_select(word: LLWordData) {
     this.setState({native_sub_word: word});
   }
 
-  close_native_sub_word(e: any) {
-    e.preventDefault();
-    this.setState({native_sub_word: null})
+  ref_select(word: LLWordData) {
+    this.setState({ref_sub_word: word});
   }
 
-  open_native_sub_word(e: any) {
+  close_native_sub_word(that: any, e: any) {
     e.preventDefault();
-    this.props.on_word_select(this.state.native_sub_word!.get_key());
+    that.setState({native_sub_word: null})
+  }
+
+  open_native_sub_word(that: any, e: any) {
+    e.preventDefault();
+    that.props.on_word_select(that.state.native_sub_word!.get_key());
+  }
+
+  close_ref_sub_word(that: any, e: any) {
+    e.preventDefault();
+    that.setState({ref_sub_word: null})
+  }
+
+  open_ref_sub_word(that: any, e: any) {
+    e.preventDefault();
+    that.props.on_word_select(that.state.ref_sub_word!.get_key());
+  }
+
+  sub_word_window(sub_word: LLWordData | null, open: any, close: any, theme: string) {
+    if(sub_word === null) {
+      return undefined;
+    }
+    return (
+      <div className={"border border-" + theme + " mb-4"}>
+        <div className="row">
+          <div className="col-md-6 text-center">
+            <a href="#/" onClick={(e) => open(this, e)}><i className="far fa-file-word m-2"></i>Open</a>
+          </div>
+          <div className="col-md-6 text-center">
+            <a href="#/" onClick={(e) => close(this, e)}><i className="fas fa-times m-2"></i>Close</a>
+          </div>
+        </div>
+        <LLWord 
+            key={sub_word.get_key()}
+            word={sub_word!} 
+            on_resolve_aliases={this.props.on_resolve_aliases} 
+            on_word_select={this.props.on_word_select} 
+            word_from_alias={this.props.word_from_alias} />
+      </div>
+    );
   }
 
   render() {
@@ -55,27 +95,6 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
         </div>
       );
     }
-    let native_sub_word = undefined;
-    if(this.state.native_sub_word !== null) {
-      native_sub_word = (
-        <div className="border border-warning mb-4">
-          <div className="row">
-            <div className="col-md-6 text-center">
-              <a href="#/" onClick={(e) => this.open_native_sub_word(e)}><i className="far fa-file-word m-2"></i>Open</a>
-            </div>
-            <div className="col-md-6 text-center">
-              <a href="#/" onClick={(e) => this.close_native_sub_word(e)}><i className="fas fa-times m-2"></i>Close</a>
-            </div>
-          </div>
-          <LLWord 
-              key={this.state.native_sub_word.get_key()}
-              word={this.state.native_sub_word!} 
-              on_resolve_aliases={this.props.on_resolve_aliases} 
-              on_word_select={this.props.on_word_select} 
-              word_from_alias={this.props.word_from_alias} />
-        </div>
-      )
-    }
     return (
       <div className="m-2">
         <LLTitle>
@@ -88,10 +107,13 @@ class LLWord extends React.Component<LLWordProps, LLWordState> {
               on_resolve_aliases={this.props.on_resolve_aliases}
               on_word_select={(word) => this.alias_select(word)}
               data={this.state.word.get_natives()}/>
-        {native_sub_word}
+        {this.sub_word_window(this.state.native_sub_word, this.open_native_sub_word, this.close_native_sub_word, "info")}
         <LLPronunciation data={this.state.word.get_pronunciations()}/>
         <LLExample data={this.state.word.get_examples()}/>
-        <LLReference on_word_select={this.props.on_word_select} word={this.state.word}/>
+        <LLReference 
+              on_word_select={(word) => this.ref_select(word)} 
+              word={this.state.word}/>
+        {this.sub_word_window(this.state.ref_sub_word, this.open_ref_sub_word, this.close_ref_sub_word, "warning")}
       </div>
     );
   }
