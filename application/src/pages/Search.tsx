@@ -30,8 +30,29 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
   }
 
   search_includes(word_data: LLWordData) {
-    let word = word_data.get_word().toLowerCase();
     let search_text = this.state.search_text.toLowerCase();
+    let native_prefix = "native:";
+    if(search_text.startsWith(native_prefix)) {
+      let natives = word_data.get_natives();
+      return this.search_includes_native(search_text.substr(native_prefix.length, 
+        search_text.length - native_prefix.length), natives);
+    } else {
+      let word = word_data.get_word().toLowerCase();
+      return this.search_includes_word(search_text, word)
+    }
+  }
+
+  search_includes_native(search_text: string, natives: string[]) {
+    let len = natives.length;
+    for(let i=0; i < len; i++) {
+      if(natives[i].includes(search_text)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  search_includes_word(search_text: string, word: string) {
     if(search_text.length > word.length) {
       return false;
     }
@@ -79,14 +100,14 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
         </li>
 
         <hr className="sidebar-divider my-0" />
-        <div style={{height: "350px"}}>
+        <div style={{height: "400px"}}>
           <div className="overflow-auto h-100 d-inline-block">
             {this.props.words.map((word: LLWordData, id: number) => {
               return (
                 <React.Fragment key={id}>
                   {this.search_includes(word) ? (
                     <li className="nav-item">
-                      <a className="nav-link" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word.get_word()}</a>
+                      <a className="nav-link pb-2 pt-2" href="#/" onClick={(e) => {this.word_select(e, word)}}>{word.get_word()}</a>
                     </li>
                   ) : undefined}
                 </React.Fragment>
