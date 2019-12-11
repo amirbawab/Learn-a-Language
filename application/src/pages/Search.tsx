@@ -31,15 +31,22 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
 
   search_includes(word_data: LLWordData) {
     let search_text = this.state.search_text.toLowerCase();
+
+    // Search native
     let native_prefix = "native:";
     if(search_text.startsWith(native_prefix)) {
       let natives = word_data.get_natives();
       return this.search_includes_native(search_text.substr(native_prefix.length, 
         search_text.length - native_prefix.length), natives);
-    } else {
-      let word = word_data.get_word().toLowerCase();
-      return this.search_includes_word(search_text, word)
     }
+
+    // Search word
+    let word_prefix = "word:";
+    if(search_text.startsWith(word_prefix)) {
+      search_text = search_text.substr(word_prefix.length, search_text.length - word_prefix.length);
+    }
+    let word = word_data.get_word().toLowerCase();
+    return this.search_includes_word(search_text, word)
   }
 
   search_includes_native(search_text: string, natives: string[]) {
@@ -89,6 +96,15 @@ class LLSearch extends React.Component<LLSearchProps, LLSearchState> {
                 <i className="fas fa-search fa-sm"></i>
               </button>
             </div>
+          </div>
+          <div className={"m-2"}>
+            <small className={"text-white"}>
+              <div><b>Search tips:</b></div>
+              <div>
+                <code className={"text-white"}>word:</code> = search word<br/>
+                <code className={"text-white"}>native:</code> = search  native text
+              </div>
+            </small>
           </div>
         </form>
 
