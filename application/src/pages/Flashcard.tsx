@@ -57,7 +57,11 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
       if(this.review_words_keys.length === 0) {
         this.show_all_words();
       } else {
-        this.show_review_words();
+        if(this.words_keys === this.review_words_keys) {
+          this.show_review_words();
+        } else {
+          this.setState(this.state)
+        }
       }
     }
     return false;
