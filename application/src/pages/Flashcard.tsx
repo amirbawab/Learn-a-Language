@@ -16,7 +16,12 @@ export interface LLFlashcardProps {
 export interface LLFlashcardState {}
  
 class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
+  props_index: number = 0;
+  review_index: number = 0;
   index: number = -1;
+  props_words_keys: string[] = this.props.words_keys;
+  review_words_keys: string[] = [];
+  words_keys: string[] = this.props.words_keys;
   state: {
     word: LLWordData | null;
     hide_native: boolean;
@@ -38,10 +43,52 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
     });
   }
 
+  review_word() {
+    if(!this.review_words_keys.includes(this.state.word!.get_key())) {
+      this.review_words_keys.push(this.state.word!.get_key())
+      this.setState(this.state)
+    }
+    return false;
+  }
+
+  remove_word_from_review() {
+    if(this.review_words_keys.includes(this.state.word!.get_key())) {
+      this.review_words_keys.splice(this.review_words_keys.indexOf(this.state.word!.get_key()), 1);
+      if(this.review_words_keys.length === 0) {
+        this.show_all_words();
+      } else {
+        this.show_review_words();
+      }
+    }
+    return false;
+  }
+
+  show_all_words() {
+    this.review_index = this.index;
+    this.words_keys = this.props_words_keys;
+    this.index = this.props_index % this.words_keys.length;
+    this.props.on_show_word(this.words_keys[this.index], (word: LLWordData) => {
+      this.new_word(word);
+    });
+    return false;
+  }
+
+  show_review_words() {
+    if(this.review_words_keys.length !== 0) {
+      this.props_index = this.index;
+      this.words_keys = this.review_words_keys;
+      this.index = this.props_index % this.words_keys.length;
+      this.props.on_show_word(this.words_keys[this.index], (word: LLWordData) => {
+        this.new_word(word);
+      });
+    }
+    return false;
+  }
+
   next() {
-    if(this.props.words_keys.length > 0) {
-      this.index = (this.index + 1) % this.props.words_keys.length;
-      this.props.on_show_word(this.props.words_keys[this.index], (word: LLWordData) => {
+    if(this.words_keys.length > 0) {
+      this.index = (this.index + 1) % this.words_keys.length;
+      this.props.on_show_word(this.words_keys[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
     }
@@ -49,9 +96,9 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
   }
 
   previous() {
-    if(this.props.words_keys.length > 0) {
-      this.index = (this.index + (this.props.words_keys.length - 1)) % this.props.words_keys.length;
-      this.props.on_show_word(this.props.words_keys[this.index], (word: LLWordData) => {
+    if(this.words_keys.length > 0) {
+      this.index = (this.index + (this.words_keys.length - 1)) % this.words_keys.length;
+      this.props.on_show_word(this.words_keys[this.index], (word: LLWordData) => {
         this.new_word(word);
       });
     }
@@ -116,7 +163,37 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
 
       main_page = (
         <React.Fragment>
-          <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b></LLTitle>
+          <LLTitle><i className="far fa-file-word"></i> <b>{this.state.word.get_word()}</b> 
+            {this.words_keys === this.review_words_keys ? <small className="ml-2"><i>(Review)</i></small> : ""}
+          </LLTitle>
+
+          <div className="row">
+            <div className="col-md-12 mb-4 text-right">
+              <LLSplitButton 
+                  theme="warning" 
+                  icon="far fa-clock" 
+                  extra_class="btn-sm"
+                  on_click={() => {
+                    return !this.review_words_keys.includes(this.state.word!.get_key()) ? 
+                      this.review_word() : this.remove_word_from_review()
+                  }}>
+                {!this.review_words_keys.includes(this.state.word!.get_key()) ? 
+                  "Mark for Review" : "Don't Review"}
+              </LLSplitButton>
+              <LLSplitButton 
+                  theme="danger" 
+                  icon="fas fa-bullseye" 
+                  extra_class="btn-sm ml-2"
+                  on_click={() => {
+                    return this.words_keys === this.props_words_keys ? 
+                      this.show_review_words() : this.show_all_words()
+                  }}>
+                {this.words_keys === this.props_words_keys ? 
+                  "Show Words to Review" : "Show All Words"}
+              </LLSplitButton>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-lg-12 mb-4">
               <LLSplitButton 
@@ -175,8 +252,9 @@ class LLFlashcard extends React.Component<LLFlashcardProps, LLFlashcardState> {
           <div className="col-md-8 mb-4 text-center">
             {
               (this.index >= 0) ? 
-              (this.index+1 + " / " + this.props.words_keys.length) : 
-              "Total words: " + this.props.words_keys.length
+              (this.index+1 + " / " + this.words_keys.length + " (" + 
+                this.review_words_keys.length + " to review)") : 
+              "Total words: " + this.words_keys.length
             }
           </div>
           <div className="col-md-2 mb-4 text-center">
